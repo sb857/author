@@ -6,7 +6,16 @@ import ipfs from "./ipfsCall";
 import "./App.css";
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+
+  state = { storageValue: 0, web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+
+  constructor(props){
+    super(props)
+
+    this.getFile = this.getFile.bind(this);
+    this.submitFile = this.submitFile.bind(this);    
+  }
+
 
   componentDidMount = async () => {
     try {
@@ -49,6 +58,31 @@ class App extends Component {
   //   this.setState({ storageValue: response });
   // };
 
+  getFile(event) {
+    // console.log("Get File..")
+    event.preventDefault()
+    const file = event.target.files[0]
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(file);
+    reader.onloadend = () => {
+      this.setState({ buffer: Buffer(reader.result)})
+        console.log('buffer', this.state.buffer)
+    }
+  }
+
+  submitFile(event){
+    event.preventDefault();
+    ipfs.files.add(this.state.buffer, (error,result) => {
+      if(error)
+      {
+        console.error(error)
+        return
+      }
+      this.setState({ipfsHash: result[0].hash})
+      console.log('IPFS Hash Value: ', this.state.ipfsHash)
+    })
+  }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -58,12 +92,11 @@ class App extends Component {
         <h1>Decentralized File System </h1>
         <p>Upload to IPFS and Secure by Ethereum</p>
         <h2>Select your file</h2>
-        <form>
-          <input type='file'/>
-          {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
+        <form onSubmit = {this.submitFile}>
+          <input type='file' onChange = {this.getFile}/> 
           <input type = 'submit'/>
         </form>
-        {/* <div>The stored value is: {this.state.storageValue}</div> */}
+        <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
       </div>
     );
   }
