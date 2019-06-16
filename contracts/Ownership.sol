@@ -25,7 +25,7 @@ contract Ownership {
         }
     }
 
-    function get(string memory ipfsHash) internal view returns (uint timestamp, string memory owner)
+    function get(string memory ipfsHash) public returns (uint timestamp, string memory owner)
     {
         return (allFiles[ipfsHash].timestamp, allFiles[ipfsHash].owner);
     }

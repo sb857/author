@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import OwnershipContract from "./contracts/Ownership.json";
 import getWeb3 from "./utils/getWeb3";
 import ipfs from "./ipfsCall";
 
@@ -7,7 +7,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { storageValue: 0, web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props){
     super(props)
@@ -27,15 +27,15 @@ class App extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
+      const deployedNetwork = OwnershipContract.networks[networkId];
       const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
+        OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
+      this.setState({ web3, accounts, contract: instance });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -45,18 +45,15 @@ class App extends Component {
     }
   };
 
-  // runExample = async () => {
-  //   const { accounts, contract } = this.state;
+  runTransaction = async () => {
+    const { accounts, contract, ipfsHash} = this.state;
 
-  //   // Stores a given value, 5 by default.
-  //   await contract.methods.set(5).send({ from: accounts[0] });
+    await contract.methods.set(accounts[0], ipfsHash).send({ from: accounts[0] });
 
-  //   // Get the value from the contract to prove it worked.
-  //   const response = await contract.methods.get().call();
+    const response = await contract.methods.get(ipfsHash).call();
 
-  //   // Update state with the result.
-  //   this.setState({ storageValue: response });
-  // };
+    this.setState({ storageValue: response });
+  };
 
   getFile(event) {
     // console.log("Get File..")
@@ -78,7 +75,7 @@ class App extends Component {
         console.error(error)
         return
       }
-      this.setState({ipfsHash: result[0].hash})
+      this.setState({ipfsHash: result[0].hash}, this.runTransaction)
       console.log('IPFS Hash Value: ', this.state.ipfsHash)
     })
   }
@@ -97,9 +94,14 @@ class App extends Component {
           <input type = 'submit'/>
         </form>
         <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
+        <p><strong>Owner: </strong> {this.state.storageValue[1]}</p>
+        <p><strong>Time Stamp: </strong> {this.state.storageValue[0]}</p>
+        {/* <image src= {'https://ipfs.io/ipfs/${this.state.ipfsHash}'} alt=""></image> */}
       </div>
     );
   }
 }
+
+
 
 export default App;
