@@ -13,7 +13,8 @@ class App extends Component {
     super(props)
 
     this.getFile = this.getFile.bind(this);
-    this.submitFile = this.submitFile.bind(this);    
+    this.submitFile = this.submitFile.bind(this);  
+    this.calcTime = this.calcTime.bind(this);  
   }
 
 
@@ -80,12 +81,25 @@ class App extends Component {
     })
   }
 
+  calcTime(timestamp) {
+    if(timestamp)
+    {
+      var date = new Date(timestamp*1000);
+      return date.toUTCString();
+    }
+    else
+    {
+      return null;
+    } 
+  }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
       <div className="App">
+        <img src={require("./capgemini.png")} width={800} height={300} ></img>
         <h1>Decentralized File System </h1>
         <p>Upload to IPFS and Secure by Ethereum</p>
         <h2>Select your file</h2>
@@ -95,13 +109,10 @@ class App extends Component {
         </form>
         <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
         <p><strong>Owner: </strong> {this.state.storageValue[1]}</p>
-        <p><strong>Time Stamp: </strong> {this.state.storageValue[0]}</p>
-        {/* <image src= {'https://ipfs.io/ipfs/${this.state.ipfsHash}'} alt=""></image> */}
+        <p><strong>Time Stamp: </strong> {this.calcTime(this.state.storageValue[0])}</p>
+        {/* <img src={require(`https://ipfs.io/ipfs/${this.state.ipfsHash`})} /> */}
       </div>
     );
   }
 }
-
-
-
 export default App;
