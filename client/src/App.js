@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import OwnershipContract from "./contracts/Ownership.json";
 import getWeb3 from "./utils/getWeb3";
 import ipfs from "./ipfsCall";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import "react-tabs/style/react-tabs.css";
 
 import "./App.css";
 
 class App extends Component {
 
-  state = { storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props){
     super(props)
@@ -15,6 +17,7 @@ class App extends Component {
     this.getFile = this.getFile.bind(this);
     this.submitFile = this.submitFile.bind(this);  
     this.calcTime = this.calcTime.bind(this);  
+    this.loadHtml = this.loadHtml.bind(this);
   }
 
 
@@ -56,15 +59,45 @@ class App extends Component {
     this.setState({ storageValue: response });
   };
 
+  searchForFile = async () => {
+    const { accounts, contract, ipfsHash} = this.state;
+
+    const response = await contract.methods.get(ipfsHash).call();
+
+    this.setState({ fileMetadata: response });
+  };
+
+  loadHtml() {
+    let address = `https://ipfs.io/ipfs/${this.state.ipfsHash}`
+    return address;
+  }
+
+  searchFile(event) {
+    event.preventDefault()
+    console.log("ACCOUNT: ")
+    // ipfs.files.get(this.state.ipfsHash, (error, result) => {
+    //   if(error)
+    //   {
+    //     console.log(error)
+    //     return
+    //   } 
+    //   this.setState({fileMetadata: result},this.searchFile)
+    // })
+    // console.log("FILE FOUND: ", this.state.fileMetadata)
+  }
+
+
   getFile(event) {
     // console.log("Get File..")
     event.preventDefault()
     const file = event.target.files[0]
     const reader = new window.FileReader()
     reader.readAsArrayBuffer(file);
+    console.log('buffer', this.state.buffer)
+
     reader.onloadend = () => {
       this.setState({ buffer: Buffer(reader.result)})
-        console.log('buffer', this.state.buffer)
+      console.log('buffer', this.state.buffer)
     }
   }
 
@@ -99,18 +132,43 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <img src={require("./capgemini.png")} width={800} height={300} ></img>
+        {/* <img src={require("./capgemini.png")} width={650} height={150} ></img> */}
         <h1>Decentralized File System </h1>
         <p>Upload to IPFS and Secure by Ethereum</p>
-        <h2>Select your file</h2>
-        <form onSubmit = {this.submitFile}>
-          <input type='file' onChange = {this.getFile}/> 
-          <input type = 'submit'/>
-        </form>
-        <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
-        <p><strong>Owner: </strong> {this.state.storageValue[1]}</p>
-        <p><strong>Time Stamp: </strong> {this.calcTime(this.state.storageValue[0])}</p>
-        {/* <img src={require(`https://ipfs.io/ipfs/${this.state.ipfsHash`})} /> */}
+        <Tabs>
+          <TabList>
+            <Tab>
+              Upload
+            </Tab>
+            <Tab>
+              Search
+            </Tab>
+          </TabList>
+          <TabPanel>
+            <h2>Select your file</h2>
+            <form onSubmit = {this.submitFile}>
+              <input type='file' onChange = {this.getFile}/> 
+              <input type = 'submit'/>
+            </form>
+            <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
+            <p><strong>Owner: </strong> {this.state.storageValue[1]}</p>
+            <p><strong>Time Stamp: </strong> {this.calcTime(this.state.storageValue[0])}</p>
+            {/* <object type='text/html' data = {this.loadHtml() }></object> */}
+            <iframe src= {this.loadHtml()}/>
+            
+          </TabPanel>  
+
+          <TabPanel>
+            <h2> Search With IPFS Hash</h2>
+            <form onSubmit = {this.searchFile}>
+              <input type = 'text'/>
+              <input type = 'submit'/>
+            </form>
+            <p><strong>Owner</strong> OWNER </p>
+            <p><strong>Time Stamp</strong> TIME STAMP </p>
+          </TabPanel>
+
+        </Tabs>
       </div>
     );
   }
