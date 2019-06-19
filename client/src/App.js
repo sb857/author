@@ -154,7 +154,7 @@ class App extends Component {
             <p><strong>Owner: </strong> {this.state.storageValue[1]}</p>
             <p><strong>Time Stamp: </strong> {this.calcTime(this.state.storageValue[0])}</p>
             {/* <object type='text/html' data = {this.loadHtml() }></object> */}
-            <iframe src= {this.loadHtml()}/>
+            <iframe src= {this.loadHtml()} width='400px' height= '600px'/>
             
           </TabPanel>  
 
