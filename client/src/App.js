@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import OwnershipContract from "./contracts/Ownership.json";
 import getWeb3 from "./utils/getWeb3";
+import OwnershipContract from "./contracts/Ownership.json"
 import ipfs from "./ipfsCall";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
@@ -36,6 +36,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
+      instance.address = "0x16c0300f54c28997add9c9f11a40540e1110795d";
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
