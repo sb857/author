@@ -6,10 +6,11 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 
 import "./App.css";
+import { runInThisContext } from "vm";
 
 class App extends Component {
 
-  state = { fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = {viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props){
     super(props)
@@ -18,6 +19,8 @@ class App extends Component {
     this.submitFile = this.submitFile.bind(this);  
     this.calcTime = this.calcTime.bind(this);  
     this.loadHtml = this.loadHtml.bind(this);
+    this.toggle = this.toggle.bind(this);
+
   }
 
 
@@ -36,7 +39,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0x16c0300f54c28997add9c9f11a40540e1110795d";
+      instance.address = "0x4333a77a024e8a3b0a1c1bb9f993a1955e42f37b";
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -53,12 +56,17 @@ class App extends Component {
   runTransaction = async () => {
     const { accounts, contract, ipfsHash} = this.state;
 
-    await contract.methods.set(accounts[0], ipfsHash).send({ from: accounts[0] });
+    await contract.methods.uploadContent(accounts[0], ipfsHash, ).send({ from: accounts[0] });
 
     const response = await contract.methods.get(ipfsHash).call();
 
     this.setState({ storageValue: response });
   };
+
+  // buyTokenTransaction = async () => {
+
+  //   await contract.methods.
+  // }
 
   searchForFile = async () => {
     const { accounts, contract, ipfsHash} = this.state;
@@ -69,22 +77,12 @@ class App extends Component {
   };
 
   loadHtml() {
-    let address = `https://ipfs.io/ipfs/${this.state.ipfsHash}`
-    return address;
+    return (`https://ipfs.io/ipfs/${this.state.ipfsHash}`);
   }
 
   searchFile(event) {
     event.preventDefault()
     console.log("ACCOUNT: ")
-    // ipfs.files.get(this.state.ipfsHash, (error, result) => {
-    //   if(error)
-    //   {
-    //     console.log(error)
-    //     return
-    //   } 
-    //   this.setState({fileMetadata: result},this.searchFile)
-    // })
-    // console.log("FILE FOUND: ", this.state.fileMetadata)
   }
 
 
@@ -111,7 +109,7 @@ class App extends Component {
         return
       }
       this.setState({ipfsHash: result[0].hash}, this.runTransaction)
-      console.log('IPFS Hash Value: ', this.state.ipfsHash)
+      console.log('IPFS Hash Value: ', this.state.ipfsHash);  
     })
   }
 
@@ -121,20 +119,27 @@ class App extends Component {
       var date = new Date(timestamp*1000);
       return date.toUTCString();
     }
-    else
-    {
-      return null;
-    } 
   }
+
+  toggle() {
+		this.setState({
+      shown: !this.state.shown,
+      viewText: 'Hide Preview'
+		});
+	}
 
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
+    var hidden = {
+			display: this.state.shown ? "block" : "none"
+		}
     return (
       <div className="App">
         {/* <img src={require("./capgemini.png")} width={650} height={150} ></img> */}
-        <h1>Decentralized File System </h1>
+        <h1>Decentralized Content Sharing </h1>
+        <p><strong>My Address: </strong>{this.state.accounts[0]}</p>
         <p>Upload to IPFS and Secure by Ethereum</p>
         <Tabs>
           <TabList>
@@ -142,20 +147,25 @@ class App extends Component {
               Upload
             </Tab>
             <Tab>
-              Search
+              Find Content
             </Tab>
           </TabList>
           <TabPanel>
             <h2>Select your file</h2>
             <form onSubmit = {this.submitFile}>
               <input type='file' onChange = {this.getFile}/> 
+              <input type='text' />
+              <br></br>
+              <br></br>
               <input type = 'submit'/>
             </form>
             <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
-            <p><strong>Owner: </strong> {this.state.storageValue[1]}</p>
+            {/* <p><strong>Owner: </strong> {this.state.storageValue[1]}</p> */}
             <p><strong>Time Stamp: </strong> {this.calcTime(this.state.storageValue[0])}</p>
             {/* <object type='text/html' data = {this.loadHtml() }></object> */}
-            <iframe src= {this.loadHtml()} width='400px' height= '600px'/>
+            <object style={ hidden } width="400" height="400" data= {this.loadHtml()} ></object>
+            <br></br>
+				    <button onClick={this.toggle}>{this.state.viewText}</button>
             
           </TabPanel>  
 
