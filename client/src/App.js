@@ -4,12 +4,13 @@ import OwnershipContract from "./contracts/Ownership.json"
 import ipfs from "./ipfsCall";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
+import Modal from 'react-awesome-modal';
 
 import "./App.css";
 
 class App extends Component {
 
-  state = {bookName: null, clientName: null, token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { visible : false, bookName: null, clientName: null, token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props){
     super(props)
@@ -87,6 +88,17 @@ class App extends Component {
     console.log("Data: ", this.state.fileMetadata);
   }
 
+  openModal() {
+    this.setState({
+        visible : true
+    });
+  }
+
+  closeModal() {
+    this.setState({
+        visible : false
+    });
+  }
 
   getFile(event) {
     // console.log("Get File..")
@@ -186,15 +198,16 @@ class App extends Component {
               <br></br>
               <button className="button"><span>Upload </span></button><br></br>
             
-              <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
+              <p onClick={()=> this.openModal()}><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
+              <button className="pre-btn" onClick={() => this.openModal()}>{this.state.viewText}</button>
 
             </form>
             
-            {/* <p><strong>Owner: </strong> {this.state.storageValue[1]}</p> */}
-            {/* <p><strong>Time Stamp: </strong> {this.calcTime(this.state.storageValue[0])}</p> */}
-            <object style={ hidden } width="400" height="400" data= {this.loadHtml()} ></object>
-            <br></br>
-				    <button onClick={this.toggle}>{this.state.viewText}</button>
+            <Modal visible={this.state.visible} width="600" height="600" effect="fadeInUp" onClickAway={() => this.closeModal()}>
+              <p>Preview</p>
+              {/* <img src=  height= "400" width= "400"></img> */}
+              <object width="400" height="400" data= {this.loadHtml()} ></object>
+            </Modal>
             
           </TabPanel>  
 
