@@ -10,7 +10,7 @@ import { runInThisContext } from "vm";
 
 class App extends Component {
 
-  state = {viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = {ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props){
     super(props)
@@ -20,7 +20,6 @@ class App extends Component {
     this.calcTime = this.calcTime.bind(this);  
     this.loadHtml = this.loadHtml.bind(this);
     this.toggle = this.toggle.bind(this);
-
   }
 
 
@@ -39,7 +38,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0x4333a77a024e8a3b0a1c1bb9f993a1955e42f37b";
+      instance.address = "0x4fc4d44cb4c3cde0ae0840ccef4ecbcea966282b";
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -54,18 +53,18 @@ class App extends Component {
   };
 
   runTransaction = async () => {
-    const { accounts, contract, ipfsHash} = this.state;
+    const { accounts, contract, ipfsHash, contentName, ownerName, price} = this.state;
 
-    await contract.methods.uploadContent(accounts[0], ipfsHash, ).send({ from: accounts[0] });
+    await contract.methods.uploadContent(ipfsHash, contentName, ownerName, price).send({ from: accounts[0] });
 
-    const response = await contract.methods.get(ipfsHash).call();
+    const response = await contract.methods.search(ipfsHash).call();
 
     this.setState({ storageValue: response });
   };
 
   // buyTokenTransaction = async () => {
 
-  //   await contract.methods.
+  //   await contract.methods.buyTokens()
   // }
 
   searchForFile = async () => {
@@ -125,9 +124,13 @@ class App extends Component {
 		this.setState({
       shown: !this.state.shown,
       viewText: 'Hide Preview'
-		});
-	}
-
+    });
+    if(this.state.viewText == 'Hide Preview')
+    {
+      this.setState({viewText: 'Show Preview'})
+    }
+  }
+    
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -141,6 +144,7 @@ class App extends Component {
         <h1>Decentralized Content Sharing </h1>
         <p><strong>My Address: </strong>{this.state.accounts[0]}</p>
         <p>Upload to IPFS and Secure by Ethereum</p>
+
         <Tabs>
           <TabList>
             <Tab>
@@ -149,19 +153,33 @@ class App extends Component {
             <Tab>
               Find Content
             </Tab>
+            <Tab>
+              Buy Tokens
+            </Tab>
           </TabList>
           <TabPanel>
+
             <h2>Select your file</h2>
             <form onSubmit = {this.submitFile}>
               <input type='file' onChange = {this.getFile}/> 
-              <input type='text' />
+              <br></br>
+              <label>Name: </label>
+              <input id= 'name' type='text' onInput= {e => this.setState({ownerName: e.target.value})}/>
+              <br></br>
+              <label>Book Name: </label>
+              <input type='text' onInput= {e => this.setState({contentName: e.target.value})}/>              
+              <br></br>
+              <label>Price: </label>
+              <input type='text' onInput= {e => this.setState({price: e.target.value})}/>              
+
               <br></br>
               <br></br>
               <input type = 'submit'/>
             </form>
+            
             <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
             {/* <p><strong>Owner: </strong> {this.state.storageValue[1]}</p> */}
-            <p><strong>Time Stamp: </strong> {this.calcTime(this.state.storageValue[0])}</p>
+            {/* <p><strong>Time Stamp: </strong> {this.calcTime(this.state.storageValue[0])}</p> */}
             {/* <object type='text/html' data = {this.loadHtml() }></object> */}
             <object style={ hidden } width="400" height="400" data= {this.loadHtml()} ></object>
             <br></br>
@@ -170,13 +188,17 @@ class App extends Component {
           </TabPanel>  
 
           <TabPanel>
-            <h2> Search With IPFS Hash</h2>
+            <p>Find Content</p>
+          </TabPanel>
+          <TabPanel>
+            <h2>Buy Tokens</h2>
             <form onSubmit = {this.searchFile}>
-              <input type = 'text'/>
+              <label>Name: </label>
+              <input type = 'text'/><br></br>
+              <label>Tokens: </label>
+              <input type = 'text'/><br></br>
               <input type = 'submit'/>
             </form>
-            <p><strong>Owner</strong> OWNER </p>
-            <p><strong>Time Stamp</strong> TIME STAMP </p>
           </TabPanel>
 
         </Tabs>

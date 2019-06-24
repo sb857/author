@@ -22,7 +22,20 @@
   color: #61dafb;
 }
 
-
+form {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  background-color: lightgrey;
+  width: 300px;
+  border: 2px solid black;
+  padding: 50px;
+  margin: 20px;
+}
+input {
+  margin-bottom: 10px;
+  margin-top: 10px; 
+}
 object {
   margin-left: 470px ;
 }

@@ -2,6 +2,68 @@
   "contractName": "Ownership",
   "abi": [
     {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "tokens",
+          "type": "uint256"
+        }
+      ],
+      "name": "buyTokens",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "fileHash",
+          "type": "string"
+        },
+        {
+          "name": "custName",
+          "type": "string"
+        }
+      ],
+      "name": "purchase",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "ipfsHash",
+          "type": "string"
+        },
+        {
+          "name": "contentName",
+          "type": "string"
+        },
+        {
+          "name": "ownerName",
+          "type": "string"
+        },
+        {
+          "name": "price",
+          "type": "uint256"
+        }
+      ],
+      "name": "uploadContent",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "anonymous": false,
       "inputs": [
         {
@@ -17,7 +79,7 @@
         {
           "indexed": false,
           "name": "owner",
-          "type": "string"
+          "type": "address"
         },
         {
           "indexed": false,
@@ -29,32 +91,151 @@
       "type": "event"
     },
     {
-      "constant": false,
+      "anonymous": false,
       "inputs": [
         {
-          "name": "owner",
-          "type": "string"
+          "indexed": false,
+          "name": "customerBalance",
+          "type": "uint256"
         },
         {
-          "name": "ipfsHash",
+          "indexed": false,
+          "name": "ownerBalance",
+          "type": "uint256"
+        }
+      ],
+      "name": "BookPurchase",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "customerBalance",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "tokenBuyer",
+          "type": "address"
+        }
+      ],
+      "name": "TokenPurchase",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "authors",
+      "outputs": [
+        {
+          "name": "",
           "type": "string"
         }
       ],
-      "name": "set",
-      "outputs": [],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
-      "constant": false,
+      "constant": true,
       "inputs": [
         {
-          "name": "ipfsHash",
+          "name": "a",
+          "type": "string"
+        },
+        {
+          "name": "b",
           "type": "string"
         }
       ],
-      "name": "get",
+      "name": "compareStrings",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "bookName",
+          "type": "string"
+        }
+      ],
+      "name": "getBooks",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "custAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getCustomer",
+      "outputs": [
+        {
+          "name": "customerName",
+          "type": "string"
+        },
+        {
+          "name": "customerBalance",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "hashValues",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "fileHash",
+          "type": "string"
+        }
+      ],
+      "name": "search",
       "outputs": [
         {
           "name": "timestamp",
@@ -62,11 +243,19 @@
         },
         {
           "name": "owner",
+          "type": "address"
+        },
+        {
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "name": "ownerName",
           "type": "string"
         }
       ],
       "payable": false,
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     }
   ],
