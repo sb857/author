@@ -6,11 +6,10 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 
 import "./App.css";
-import { runInThisContext } from "vm";
 
 class App extends Component {
 
-  state = {ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = {bookName: null, clientName: null, token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props){
     super(props)
@@ -20,6 +19,8 @@ class App extends Component {
     this.calcTime = this.calcTime.bind(this);  
     this.loadHtml = this.loadHtml.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.buyToken = this.buyToken.bind(this);
+    this.searchFile = this.searchFile.bind(this);
   }
 
 
@@ -38,7 +39,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0x4fc4d44cb4c3cde0ae0840ccef4ecbcea966282b";
+      instance.address = "0xf6924e212d098baef0899c9f1614d280411daf8c";
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -62,15 +63,16 @@ class App extends Component {
     this.setState({ storageValue: response });
   };
 
-  // buyTokenTransaction = async () => {
+  buyTokenTransaction = async () => {
 
-  //   await contract.methods.buyTokens()
-  // }
+    const {contract, accounts, clientName, token } = this.state
+    await contract.methods.buyTokens(clientName, token).send({from: accounts[0]});
+  };
 
   searchForFile = async () => {
-    const { accounts, contract, ipfsHash} = this.state;
+    const { contract, bookName} = this.state;
 
-    const response = await contract.methods.get(ipfsHash).call();
+    const response = await contract.methods.search(bookName).call();
 
     this.setState({ fileMetadata: response });
   };
@@ -81,7 +83,8 @@ class App extends Component {
 
   searchFile(event) {
     event.preventDefault()
-    console.log("ACCOUNT: ")
+    this.setState(this.searchForFile);
+    console.log("Data: ", this.state.fileMetadata);
   }
 
 
@@ -125,10 +128,15 @@ class App extends Component {
       shown: !this.state.shown,
       viewText: 'Hide Preview'
     });
-    if(this.state.viewText == 'Hide Preview')
+    if(this.state.viewText === 'Hide Preview')
     {
       this.setState({viewText: 'Show Preview'})
     }
+  }
+
+  buyToken(event) {
+    event.preventDefault();
+    this.setState(this.buyTokenTransaction);
   }
     
   render() {
@@ -141,10 +149,11 @@ class App extends Component {
     return (
       <div className="App">
         {/* <img src={require("./capgemini.png")} width={650} height={150} ></img> */}
-        <h1>Decentralized Content Sharing </h1>
-        <p><strong>My Address: </strong>{this.state.accounts[0]}</p>
-        <p>Upload to IPFS and Secure by Ethereum</p>
-
+        <div className="Header">
+          <h1>Decentralized Content Sharing </h1>
+          <p><strong>My Address: </strong>{this.state.accounts[0]}</p>
+          <p>Upload to IPFS and Secure by Ethereum</p>
+        </div>
         <Tabs>
           <TabList>
             <Tab>
@@ -157,6 +166,7 @@ class App extends Component {
               Buy Tokens
             </Tab>
           </TabList>
+          
           <TabPanel>
 
             <h2>Select your file</h2>
@@ -174,13 +184,14 @@ class App extends Component {
 
               <br></br>
               <br></br>
-              <input type = 'submit'/>
+              <button className="button"><span>Upload </span></button><br></br>
+            
+              <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
+
             </form>
             
-            <p><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
             {/* <p><strong>Owner: </strong> {this.state.storageValue[1]}</p> */}
             {/* <p><strong>Time Stamp: </strong> {this.calcTime(this.state.storageValue[0])}</p> */}
-            {/* <object type='text/html' data = {this.loadHtml() }></object> */}
             <object style={ hidden } width="400" height="400" data= {this.loadHtml()} ></object>
             <br></br>
 				    <button onClick={this.toggle}>{this.state.viewText}</button>
@@ -188,16 +199,27 @@ class App extends Component {
           </TabPanel>  
 
           <TabPanel>
-            <p>Find Content</p>
+            <h2><strong>Search</strong></h2>
+            <form onSubmit = {this.searchFile}>
+            <label>Book Name: </label>
+            <input type = 'text' onInput= {e => this.setState({bookName: e.target.value})}/>
+            <p> <strong>OR</strong></p><br></br>
+            <label>Author Name: </label>
+            <input type = 'text' onInput= {e => this.setState({authorSearchName: e.target.value})}/><br></br>
+            
+            <button className="button"><span>Search </span></button>
+
+            </form>
           </TabPanel>
+
           <TabPanel>
             <h2>Buy Tokens</h2>
-            <form onSubmit = {this.searchFile}>
+            <form onSubmit = {this.buyToken}>
               <label>Name: </label>
-              <input type = 'text'/><br></br>
+              <input type = 'text' onInput= {e => this.setState({clientName: e.target.value})}/><br></br>
               <label>Tokens: </label>
-              <input type = 'text'/><br></br>
-              <input type = 'submit'/>
+              <input type = 'text' onInput= {e => this.setState({token: e.target.value})}/><br></br>
+              <button className="button"><span>Buy </span></button>
             </form>
           </TabPanel>
 

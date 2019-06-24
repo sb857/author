@@ -22,16 +22,43 @@
   color: #61dafb;
 }
 
+input[type=text] {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  background-image: url('./utils/search.png');
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 40px;
+}
+
 form {
-  align-items: center;
   display: flex;
+  align-items: center;
   flex-direction: column;
   background-color: lightgrey;
   width: 300px;
   border: 2px solid black;
   padding: 50px;
-  margin: 20px;
+  margin: auto;
+  border-radius: 4px;
 }
+
+input[type=file] {
+    background-color: 	#606060;
+    border: none;
+    border-radius: 4px;
+    color: #FFF;
+    cursor:pointer;
+    text-align: center;
+    display: inline-block;
+    padding: 6px;
+    box-sizing: content-box;
+}
+
 input {
   margin-bottom: 10px;
   margin-top: 10px; 
@@ -39,6 +66,54 @@ input {
 object {
   margin-left: 470px ;
 }
+/* 
+.Header {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  text-align: center;
+  margin: auto;
+} */
+
+.button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #383838	;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 18px;
+  padding: 10px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
