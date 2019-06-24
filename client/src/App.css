@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+
 }
 
 .App-logo {
@@ -22,12 +23,31 @@
   color: #61dafb;
 }
 
-input[type=text] {
-  width: 100%;
+.Header {
+
+}
+
+.textIn {
+  width: 80%;
+  height: 20%;
+  text-align: center;
   box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 15px;
+  background-color: white;
+  background-image: url('./utils/search.png');
+  background-position: 10px 10px; 
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 40px;}
+
+.text {
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 15px;
   background-color: white;
   background-image: url('./utils/search.png');
   background-position: 10px 10px; 
@@ -35,11 +55,17 @@ input[type=text] {
   padding: 12px 20px 12px 40px;
 }
 
-form {
+.label {
+  font-size: 18px;
+  display: flow-root; 
+  text-align: center;
+}
+
+.form {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: lightgrey;
+  background-color:  #7C7287;
   width: 300px;
   border: 2px solid black;
   padding: 50px;
@@ -66,14 +92,19 @@ input {
 object {
   margin-left: 470px ;
 }
-/* 
-.Header {
+
+.searchForm {
   display: flex;
-  align-items: center;
-  position: fixed;
-  text-align: center;
-  margin: auto;
-} */
+  /* align-items: center; */
+  flex-direction: row;
+  background-color: #7C7287;
+  width: auto;
+  height: 45px;
+  border: 2px solid black;
+  padding: 4px;
+  margin: 20px;
+  border-radius: 4px;
+}
 
 .button {
   display: inline-block;

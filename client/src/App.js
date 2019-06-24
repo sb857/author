@@ -165,9 +165,10 @@ class App extends Component {
           <h1>Decentralized Content Sharing </h1>
           <p><strong>My Address: </strong>{this.state.accounts[0]}</p>
           <p>Upload to IPFS and Secure by Ethereum</p>
-        </div>
+        </div>  
+
         <Tabs>
-          <TabList>
+          <TabList className= "tabs">
             <Tab>
               Upload
             </Tab>
@@ -179,20 +180,20 @@ class App extends Component {
             </Tab>
           </TabList>
           
-          <TabPanel>
+          <TabPanel >
 
             <h2>Select your file</h2>
-            <form onSubmit = {this.submitFile}>
+            <form className="form" onSubmit = {this.submitFile}>
               <input type='file' onChange = {this.getFile}/> 
               <br></br>
               <label>Name: </label>
-              <input id= 'name' type='text' onInput= {e => this.setState({ownerName: e.target.value})}/>
+              <input className="text" type='text' onInput= {e => this.setState({ownerName: e.target.value})}/>
               <br></br>
               <label>Book Name: </label>
-              <input type='text' onInput= {e => this.setState({contentName: e.target.value})}/>              
+              <input className="text"  type='text' onInput= {e => this.setState({contentName: e.target.value})}/>              
               <br></br>
               <label>Price: </label>
-              <input type='text' onInput= {e => this.setState({price: e.target.value})}/>              
+              <input className="text" type='text' onInput= {e => this.setState({price: e.target.value})}/>              
 
               <br></br>
               <br></br>
@@ -211,27 +212,26 @@ class App extends Component {
             
           </TabPanel>  
 
-          <TabPanel>
+          <TabPanel >
             <h2><strong>Search</strong></h2>
-            <form onSubmit = {this.searchFile}>
-            <label>Book Name: </label>
-            <input type = 'text' onInput= {e => this.setState({bookName: e.target.value})}/>
-            <p> <strong>OR</strong></p><br></br>
-            <label>Author Name: </label>
-            <input type = 'text' onInput= {e => this.setState({authorSearchName: e.target.value})}/><br></br>
-            
+            <form className="searchForm" onSubmit = {this.searchFile}>
+              <label className="label">Book Name: </label>
+              <input className="textIn" type = 'text' onInput= {e => this.setState({bookName: e.target.value})}/>
+              {/* <p>OR</p><br></br> */}
+              <label className="label">Author Name: </label>
+              <input className="textIn" type = 'text' onInput= {e => this.setState({authorSearchName: e.target.value})}/>
+            </form>
             <button className="button"><span>Search </span></button>
 
-            </form>
           </TabPanel>
 
-          <TabPanel>
+          <TabPanel className= "tab">
             <h2>Buy Tokens</h2>
-            <form onSubmit = {this.buyToken}>
+            <form className="form" onSubmit = {this.buyToken}>
               <label>Name: </label>
-              <input type = 'text' onInput= {e => this.setState({clientName: e.target.value})}/><br></br>
+              <input className="text" type = 'text' onInput= {e => this.setState({clientName: e.target.value})}/><br></br>
               <label>Tokens: </label>
-              <input type = 'text' onInput= {e => this.setState({token: e.target.value})}/><br></br>
+              <input className="text" type = 'text' onInput= {e => this.setState({token: e.target.value})}/><br></br>
               <button className="button"><span>Buy </span></button>
             </form>
           </TabPanel>
