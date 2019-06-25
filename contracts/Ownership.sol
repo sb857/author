@@ -1,4 +1,4 @@
-pragma solidity 0.5;
+pragma solidity ^0.5.0;
 
 contract ContentShare {
 
@@ -15,14 +15,14 @@ contract ContentShare {
     struct Customer {
 
         string customerName;
-        uint _balance;
+        uint balance;
         // FileMap booksBought;
     }
 
     struct Owner {
 
         string ownerName;
-        uint _balance;
+        uint balance;
         // FileMap booksUploaded;
     }
 
@@ -33,23 +33,30 @@ contract ContentShare {
     event FileLogStatus(bool status, uint timestamp, address owner, string ipfsHash);
     event BookPurchase(uint customerBalance, uint ownerBalance);
     event TokenPurchase(uint customerBalance, address tokenBuyer);
-
-    function uploadContent(address owner, string memory ipfsHash, string memory contentName, string memory ownerName, uint price) public {
+    
+    string[] public hashValues;
+    string[] public authors;
+    // string[] public foundIpfs;
+    
+    function uploadContent(string memory ipfsHash, string memory contentName, string memory ownerName, uint price) public {
         if(allFiles[ipfsHash].timestamp == 0)
 
         {
-            allFiles[ipfsHash] = FileMap(block.timestamp, owner, contentName, ownerName, price);
-            emit FileLogStatus(true, block.timestamp, owner, ipfsHash);
+            allFiles[ipfsHash] = FileMap(block.timestamp, msg.sender, contentName, ownerName, price);
+            emit FileLogStatus(true, block.timestamp, msg.sender, ipfsHash);
+            
+            hashValues.push(ipfsHash) -1;
+            authors.push(ownerName) -1;
         }
 
         else
         {
-            emit FileLogStatus(true, block.timestamp, owner, ipfsHash);
+            emit FileLogStatus(true, block.timestamp, msg.sender, ipfsHash);
         }
     }
 
-    function search(string memory fileHash) public view returns (uint timestamp, address owner) {
-        return (allFiles[fileHash].timestamp, allFiles[fileHash].owner);
+    function search(string memory fileHash) public view returns (uint timestamp, address owner, uint price, string memory ownerName) {
+        return (allFiles[fileHash].timestamp, allFiles[fileHash].owner, allFiles[fileHash].price, allFiles[fileHash].ownerName);
     }
 
     function purchase(string memory fileHash, string memory custName) public {
@@ -63,42 +70,74 @@ contract ContentShare {
         Customer memory customer = customerDetails[msg.sender];
         customer.customerName = custName;
         
-        custBalance = customer._balance - unitPrice;
-        ownerBalance = author._balance + unitPrice;
+        custBalance = customer.balance - unitPrice;
+        ownerBalance = author.balance + unitPrice;
 
         ownerDetails[owner] = Owner(author.ownerName, ownerBalance);
         customerDetails[msg.sender] = Customer(custName, custBalance);
 
-        emit BookPurchase(customer._balance, author._balance);
+        emit BookPurchase(customer.balance, author.balance);
     }
 
     function buyTokens(string memory name, uint tokens) public {
         
         Customer memory customer = customerDetails[msg.sender];
-        uint totalBalance = customer._balance + tokens;
+        uint totalBalance = customer.balance + tokens;
                     
         customerDetails[msg.sender] = Customer(name, totalBalance);
 
-        emit TokenPurchase(customer._balance, msg.sender);
+        emit TokenPurchase(customer.balance, msg.sender);
         
     }
     
     function getCustomer(address custAddress) public view returns (string memory customerName, uint customerBalance) {
-        return (customerDetails[custAddress].customerName, customerDetails[custAddress]._balance);
+        return (customerDetails[custAddress].customerName, customerDetails[custAddress].balance);
     }
     
-    // function getBooks() public view returns(string memory bookName) {
-    //     return();
+    function compareStrings (string memory a, string memory b) public view returns (bool) {
+        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))) );
+    }
+    
+    // function getAllBooks() public view returns (string[] memory) {
+    //     return ();
     // }
     
-    // function getBookCustomers(string memory ipfsHash) public view returns (Customer memory customer){
+    function getBooks(string memory bookName) public view returns (string memory) {
+        for(uint i=0; i<=hashValues.length; i++){
+            string memory name = allFiles[hashValues[i]].contentName;
+            if(compareStrings(name, bookName)){
+                return (hashValues[i]);
+                // foundIpfs.push(hashValues[i]);
+            }
+            // return (foundIpfs);
+        }
+    }
+ }
 
-    //     return (allFiles[ipfsHash].customers);
 
-    // }
 
-    // function getBooks(address memory customerAddress) public view returns (FileMap fileMap) {
-    //     return()
-    // }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
