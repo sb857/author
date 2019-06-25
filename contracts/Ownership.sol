@@ -1,6 +1,4 @@
 pragma solidity ^0.5.0;
-pragma experimental ABIEncoderV2;
-
 
 contract ContentShare {
     uint filecount;
@@ -30,7 +28,7 @@ contract ContentShare {
     }
 
     mapping (string => FileMap) allFiles;
-    mapping (uint => string) allHashes;
+    // mapping (uint => string) allHashes;
     mapping (address => Customer) customerDetails;
     mapping (address => Owner) ownerDetails;
 
@@ -40,6 +38,8 @@ contract ContentShare {
     
     string[] public hashValues;
     string[] public authors;
+    string[] public bookNames;
+    uint[] public prices;
     // string[] public foundIpfs;
     
     function uploadContent(string memory ipfsHash, string memory contentName, string memory ownerName, uint price) public {
@@ -49,10 +49,12 @@ contract ContentShare {
         {
             allFiles[ipfsHash] = FileMap(block.timestamp, msg.sender, contentName, ownerName, price);
             emit FileLogStatus(true, block.timestamp, msg.sender, ipfsHash);
-            allHashes[filecount] = ipfsHash;
-            filecount++;
+            // allHashes[filecount] = ipfsHash;
+            // filecount++;
             hashValues.push(ipfsHash) -1;
             authors.push(ownerName) -1;
+            bookNames.push(contentName) -1;
+            prices.push(price) -1;
         }
 
         else
@@ -116,11 +118,11 @@ contract ContentShare {
         }
     }
     
-    function getAllBooks() public view returns (FileMap[] memory) {
-        FileMap[] memory ret = new FileMap[](filecount);
-        for ( uint i = 0; i < filecount; i++){
-            ret[i] = allFiles[allHashes[i]];
-        }
-        return ret;
-    }
+    // function getAllBooks() public view returns (FileMap[] memory) {
+    //     FileMap[] memory ret = new FileMap[](hashValues.length);
+    //     for ( uint i = 0; i < hashValues.length; i++){
+    //         ret[i] = allFiles[hashValues[i]];
+    //     }
+    //     return ret;
+    // }
  }
