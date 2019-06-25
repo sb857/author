@@ -178,6 +178,9 @@ class App extends Component {
             <Tab>
               Buy Tokens
             </Tab>
+	    <Tab>
+	      Author Insights
+	    </Tab>
           </TabList>
           
           <TabPanel >
@@ -186,10 +189,10 @@ class App extends Component {
             <form className="form" onSubmit = {this.submitFile}>
               <input type='file' onChange = {this.getFile}/> 
               <br></br>
-              <label>Name: </label>
+              <label>Title: </label>
               <input className="text" type='text' onInput= {e => this.setState({ownerName: e.target.value})}/>
               <br></br>
-              <label>Book Name: </label>
+              <label>Author: </label>
               <input className="text"  type='text' onInput= {e => this.setState({contentName: e.target.value})}/>              
               <br></br>
               <label>Price: </label>
