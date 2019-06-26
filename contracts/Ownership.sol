@@ -1,4 +1,5 @@
 pragma solidity ^0.5.0;
+pragma experimental ABIEncoderV2;
 
 contract ContentShare {
     uint filecount;
@@ -45,7 +46,6 @@ contract ContentShare {
     function uploadContent(string memory ipfsHash, string memory contentName, string memory ownerName, uint price) public {
         
         if(allFiles[ipfsHash].timestamp == 0)
-
         {
             allFiles[ipfsHash] = FileMap(block.timestamp, msg.sender, contentName, ownerName, price);
             emit FileLogStatus(true, block.timestamp, msg.sender, ipfsHash);
@@ -118,11 +118,13 @@ contract ContentShare {
         }
     }
     
-    // function getAllBooks() public view returns (FileMap[] memory) {
-    //     FileMap[] memory ret = new FileMap[](hashValues.length);
-    //     for ( uint i = 0; i < hashValues.length; i++){
-    //         ret[i] = allFiles[hashValues[i]];
-    //     }
-    //     return ret;
+    function getBooks() public view returns (string[] memory, string[] memory, uint[] memory, string[] memory) {
+        return(bookNames, authors, prices, hashValues);
+    }
+    
+    // function getHash() public view returns (string[] memory) {
+    //     return(hashValues);
     // }
+    
+    
  }
