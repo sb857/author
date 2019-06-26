@@ -147,6 +147,25 @@
       "constant": true,
       "inputs": [
         {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "bookNames",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
           "name": "a",
           "type": "string"
         },
@@ -160,6 +179,32 @@
         {
           "name": "",
           "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getBooks",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string[]"
+        },
+        {
+          "name": "",
+          "type": "string[]"
+        },
+        {
+          "name": "",
+          "type": "uint256[]"
+        },
+        {
+          "name": "",
+          "type": "string[]"
         }
       ],
       "payable": false,
@@ -221,6 +266,25 @@
         {
           "name": "",
           "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "prices",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
         }
       ],
       "payable": false,

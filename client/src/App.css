@@ -23,8 +23,15 @@
   color: #61dafb;
 }
 
-.Header {
-
+.preview {
+  /* align-content: center;
+  display: flex;
+  flex-direction: row; */
+  /* text-align: center; */
+  margin: auto;
+  border: 2px solid rgb(22, 21, 21);
+  height: 500px;
+  width: 500px;
 }
 
 .textIn {
@@ -56,9 +63,16 @@
 }
 
 .label {
-  font-size: 18px;
-  display: flow-root; 
-  text-align: center;
+  margin: auto;
+}
+
+.hashLink {
+  cursor: pointer;
+}
+
+.hashLink:hover {
+  color: rgba(36, 36, 187, 0.479);
+  text-underline-position: below;
 }
 
 .form {
@@ -66,7 +80,7 @@
   align-items: center;
   flex-direction: column;
   background-color:  #7C7287;
-  width: 300px;
+  width: 400px;
   border: 2px solid black;
   padding: 50px;
   margin: auto;
@@ -87,7 +101,6 @@ input[type=file] {
 
 input {
   margin-bottom: 10px;
-  margin-top: 10px; 
 }
 object {
   margin-left: 470px ;
@@ -145,6 +158,61 @@ object {
   right: 0;
 }
 
+.ui stackable grid {
+  text-align: center;
+  margin:auto;
+}
+
+div.content {
+  padding: 0 1em;
+  margin: 5px 0;
+}   
+.content .heading {
+  font-size: 15px;
+  width: 100%;
+  padding: 15px 0 0 15px;
+  margin:auto;
+
+}   
+.content div strong {
+  font-size: 20px;
+}
+.content .sort {
+  font-size: 15px;
+  margin: 3rem 0 2rem 0;
+  padding: 0 8px;
+} 
+select {
+  width: 200px;
+  height: 25px;
+  background: #e8e8e8;
+  font-weight: 500;
+  padding: 0 10px;
+  margin-left: 15px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}                  
+.content .column {
+  padding: 0.5em !important;
+  margin:auto;
+
+}  
+@media screen and (max-width: 700px) {
+  div.three {
+      display: none !important;
+  }
+  .sidebar {
+      display: none;
+      width: 0;
+      height: 300px;
+      position: relative;
+  }
+  div.content {
+      padding: 0;
+      margin-left: 0;
+  }
+}             
 
 @keyframes App-logo-spin {
   from {

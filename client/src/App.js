@@ -5,12 +5,13 @@ import ipfs from "./ipfsCall";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 import Modal from 'react-awesome-modal';
+import Card from './Card.js';
 
 import "./App.css";
 
 class App extends Component {
 
-  state = { visible : false, bookName: null, clientName: null, token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { bookDetils: [],prnt: false, render: true, visible : false, bookName: null, clientName: null, token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props){
     super(props)
@@ -21,11 +22,25 @@ class App extends Component {
     this.loadHtml = this.loadHtml.bind(this);
     this.toggle = this.toggle.bind(this);
     this.buyToken = this.buyToken.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     this.searchFile = this.searchFile.bind(this);
+    this.checkView = this.checkView.bind(this);//view timer
+    this.getAllBooks = this.getAllBooks.bind(this);
   }
 
 
   componentDidMount = async () => {
+    
+    // this.keyPress();
+    var self=this;
+    window.addEventListener("keyup", function(e) {
+      if (e.keyCode == 44) {
+        self.setState({prnt: true});
+        console.log("pressed!")
+      }
+    });
+    setInterval(()=> this.getAll, 1000)
+    setInterval(()=> this.checkView(),1000);//view timer
     try {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
@@ -40,8 +55,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0xf6924e212d098baef0899c9f1614d280411daf8c";
-
+      instance.address = "0xc90a7d3c9866cae66babddd7d89b463b0f234ba0";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -54,6 +68,14 @@ class App extends Component {
     }
   };
 
+  checkView() { //view timer
+      if(this.state.render == false)
+      {
+        console.log("time out");
+        this.closeModal();
+      }
+    }
+
   runTransaction = async () => {
     const { accounts, contract, ipfsHash, contentName, ownerName, price} = this.state;
 
@@ -65,33 +87,53 @@ class App extends Component {
   };
 
   buyTokenTransaction = async () => {
-
     const {contract, accounts, clientName, token } = this.state
     await contract.methods.buyTokens(clientName, token).send({from: accounts[0]});
   };
 
-  searchForFile = async () => {
-    const { contract, bookName} = this.state;
-
-    const response = await contract.methods.search(bookName).call();
-
-    this.setState({ fileMetadata: response });
+  // searchForFile = async () => {
+  //   const { contract, bookName} = this.state;
+  //   const response = await contract.methods.getBooks(bookName).call();
+  //   this.setState({ fileMetadata: response });
+  // };
+  
+  
+  getAll = async () => {
+    const { contract } = this.state;
+    const response = await contract.methods.getBooks().call();
+    this.setState({ bookDetils: response});
+    console.log(this.state.bookDetils);
   };
 
   loadHtml() {
     return (`https://ipfs.io/ipfs/${this.state.ipfsHash}`);
+    // return (`https://wix.com`);
   }
 
   searchFile(event) {
     event.preventDefault()
-    this.setState(this.searchForFile);
-    console.log("Data: ", this.state.fileMetadata);
+    console.log("Push");
+    // this.setState(this.searchForFile);
+    // console.log("Data: ", this.state.fileMetadata);
   }
 
   openModal() {
-    this.setState({
+    if(this.state.render)
+    { 
+      this.setState({
         visible : true
-    });
+      });
+      setTimeout(
+        function() {
+            this.setState({render:false});
+        }.bind(this),5000);
+    }
+    else
+    {
+      this.setState({
+        visible : false
+      });
+    }
   }
 
   closeModal() {
@@ -101,7 +143,6 @@ class App extends Component {
   }
 
   getFile(event) {
-    // console.log("Get File..")
     event.preventDefault()
     const file = event.target.files[0]
     const reader = new window.FileReader()
@@ -150,17 +191,40 @@ class App extends Component {
     event.preventDefault();
     this.setState(this.buyTokenTransaction);
   }
-    
+
+  getAllBooks() {
+    this.setState(this.getAll);
+  }
+ 
+  // showCards() {
+  //   var node = document.createElement("LI");
+  //   var bookNode = document.createTextNode("BN");
+  //   // var authorNode = document.createTextNode(this.state.fileMetadata[1]);
+  //   for(var i=0; i<6; i++)
+  //   {
+  //       document.getElementById('cardGrid').appendChild(node.cloneNode(true));
+  //       node.appendChild(bookNode);
+  //       // node.appendChild(authorNode);
+  //   }
+  //   console.log(this.state.fileMetadata);
+
+  // }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
-    var hidden = {
-			display: this.state.shown ? "block" : "none"
-		}
+    // var hidden = {
+		// 	display: this.state.shown ? "block" : "none"
+		// }
+    if(this.state.prnt)
+    {
+      return <div></div>
+    }
+
     return (
       <div className="App">
-        {/* <img src={require("./capgemini.png")} width={650} height={150} ></img> */}
+        {/* <input onKeyPress={this.myKeyPress}/> */}
         <div className="Header">
           <h1>Decentralized Content Sharing </h1>
           <p><strong>My Address: </strong>{this.state.accounts[0]}</p>
@@ -178,12 +242,15 @@ class App extends Component {
             <Tab>
               Buy Tokens
             </Tab>
+            <Tab>
+              Test
+            </Tab>
           </TabList>
           
           <TabPanel >
 
             <h2>Select your file</h2>
-            <form className="form" onSubmit = {this.submitFile}>
+            <form  className="form" onSubmit = {this.submitFile}>
               <input type='file' onChange = {this.getFile}/> 
               <br></br>
               <label>Name: </label>
@@ -194,35 +261,58 @@ class App extends Component {
               <br></br>
               <label>Price: </label>
               <input className="text" type='text' onInput= {e => this.setState({price: e.target.value})}/>              
-
               <br></br>
               <br></br>
               <button className="button"><span>Upload </span></button><br></br>
-            
-              <p onClick={()=> this.openModal()}><strong>IPFS Hash:</strong> {this.state.ipfsHash}</p>
-              <button className="pre-btn" onClick={() => this.openModal()}>{this.state.viewText}</button>
+
+              <p><strong>IPFS Hash:</strong></p>
+              <p className="hashLink" onClick={()=> this.openModal()}>{this.state.ipfsHash}</p>
 
             </form>
             
             <Modal visible={this.state.visible} width="600" height="600" effect="fadeInUp" onClickAway={() => this.closeModal()}>
-              <p>Preview</p>
-              {/* <img src=  height= "400" width= "400"></img> */}
-              <object width="400" height="400" data= {this.loadHtml()} ></object>
+              <p><strong>Preview</strong></p>
+              <iframe className="preview" src= {this.loadHtml()} ></iframe>
             </Modal>
             
           </TabPanel>  
 
           <TabPanel >
-            <h2><strong>Search</strong></h2>
+            {/* <h2><strong>Search</strong></h2>
             <form className="searchForm" onSubmit = {this.searchFile}>
-              <label className="label">Book Name: </label>
+              <label className="label">Book: </label>
               <input className="textIn" type = 'text' onInput= {e => this.setState({bookName: e.target.value})}/>
-              {/* <p>OR</p><br></br> */}
-              <label className="label">Author Name: </label>
-              <input className="textIn" type = 'text' onInput= {e => this.setState({authorSearchName: e.target.value})}/>
-            </form>
-            <button className="button"><span>Search </span></button>
+              {/* <label className="label">Author: </label>
+              <input className="textIn" type = 'text' onInput= {e => this.setState({authorSearchName: e.target.value})}/> */}
+            {/* </form> */}
+            
+            {/* <p>{this.state.fileMetadata}</p> */}
 
+            {/* <button className="button"><span>Search </span></button> */}
+            {/* {
+              this.state.bookDetils.map((eachBook)=> (
+                    eachBook.map((item) => (
+                      <Card pname={item[0]} author={item[1]} price={item[2]} /> 
+                ))
+              )
+              )
+            }   */}
+   {/* {
+     
+              searchResults = Object.keys(this.state.results).map(key =>
+      <item key={key} value={key}>{this.state.results[key]}</item>
+    ) */}
+
+
+  {/* console.log(this.state.results); */}
+  {/* }  */}
+              {/* // => (
+                    <Card pname={item[0]} author={item[1]} price={item[2]} /> 
+                )) 
+            {/* } */}
+              {/* <Card pname={this.state.hashValues} /> */}
+              <button onClick={this.getAll}>Refresh</button>         
+             
           </TabPanel>
 
           <TabPanel className= "tab">
@@ -235,7 +325,7 @@ class App extends Component {
               <button className="button"><span>Buy </span></button>
             </form>
           </TabPanel>
-
+         
         </Tabs>
       </div>
     );
