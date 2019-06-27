@@ -191,6 +191,12 @@ class App extends Component {
     this.setState(this.buyTokenTransaction);
   }
 
+  getIndex(e)
+  {
+    console.log(e.target.getAttribute("data-index"));
+  };
+
+
   // showCards() {
   //   var node = document.createElement("LI");
   //   var bookNode = document.createTextNode("BN");
@@ -216,6 +222,18 @@ class App extends Component {
     {
       return <div></div>
     }
+
+    const handler = function(e){
+      console.log(e.target.getAttribute("pname")); 
+    };
+  
+    var cardItems = this.state.bookDetails.map(function(item, index){
+      return (
+            // item.map((i) => {
+              <Card key={index} onClick={(handler)} pname={item} />
+            // })
+      )
+  });
 
     return (
       <div className="App">
@@ -274,11 +292,7 @@ class App extends Component {
 
           <TabPanel >
           {
-            this.state.bookDetails.map((item) => (
-              // item.map((i) => {
-                <Card pname={item} author={item} price={item} />
-              // })
-            ))
+            cardItems
           }
           {
             console.log(this.state.bookDetails)

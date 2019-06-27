@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 
 class Card extends Component {
     render() {
+        
         return (
+          
             <React.Fragment>
-                <div className="card">
+                <div className="card" onClick={this.props.onClick}>
                     
-                    {/* <img className="image" alt="product" src={this.props.imag} align="middle"></img> */}
-                    
+                    <img className="image" alt="product" src={this.props.imag} align="middle"></img>
                     <div className="p-des">
                         <div>{this.props.pname}</div>
                         <div>{this.props.author}</div>
                         <div>{this.props.price}</div>
                     </div>
+
                 </div>
                 <style jsx="true">{`
                     .image {
