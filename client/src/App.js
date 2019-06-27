@@ -11,7 +11,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { bookDetils: [],prnt: false, render: true, visible : false, bookName: null, clientName: null, token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { bookDetails: [],prnt: false, render: true, visible : false, bookName: null, clientName: null, token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props){
     super(props)
@@ -25,7 +25,7 @@ class App extends Component {
     this.closeModal = this.closeModal.bind(this);
     this.searchFile = this.searchFile.bind(this);
     this.checkView = this.checkView.bind(this);//view timer
-    this.getAllBooks = this.getAllBooks.bind(this);
+    // this.getAllBooks = this.getAllBooks.bind(this);
   }
 
 
@@ -55,7 +55,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0xc90a7d3c9866cae66babddd7d89b463b0f234ba0";
+      instance.address = "0x2662abbde993d9a2340e8a07a42d70869def5946";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -71,7 +71,6 @@ class App extends Component {
   checkView() { //view timer
       if(this.state.render == false)
       {
-        console.log("time out");
         this.closeModal();
       }
     }
@@ -84,6 +83,7 @@ class App extends Component {
     const response = await contract.methods.search(ipfsHash).call();
 
     this.setState({ storageValue: response });
+    console.log("storage Value: ",this.state.storageValue);
   };
 
   buyTokenTransaction = async () => {
@@ -97,12 +97,11 @@ class App extends Component {
   //   this.setState({ fileMetadata: response });
   // };
   
-  
   getAll = async () => {
     const { contract } = this.state;
-    const response = await contract.methods.getBooks().call();
-    this.setState({ bookDetils: response});
-    console.log(this.state.bookDetils);
+    const response = await contract.methods.getBookDetails().call();
+    this.setState({ bookDetails: response});
+    console.log("books: ",this.state.bookDetails);
   };
 
   loadHtml() {
@@ -192,10 +191,6 @@ class App extends Component {
     this.setState(this.buyTokenTransaction);
   }
 
-  getAllBooks() {
-    this.setState(this.getAll);
-  }
- 
   // showCards() {
   //   var node = document.createElement("LI");
   //   var bookNode = document.createTextNode("BN");
@@ -278,40 +273,17 @@ class App extends Component {
           </TabPanel>  
 
           <TabPanel >
-            {/* <h2><strong>Search</strong></h2>
-            <form className="searchForm" onSubmit = {this.searchFile}>
-              <label className="label">Book: </label>
-              <input className="textIn" type = 'text' onInput= {e => this.setState({bookName: e.target.value})}/>
-              {/* <label className="label">Author: </label>
-              <input className="textIn" type = 'text' onInput= {e => this.setState({authorSearchName: e.target.value})}/> */}
-            {/* </form> */}
-            
-            {/* <p>{this.state.fileMetadata}</p> */}
-
-            {/* <button className="button"><span>Search </span></button> */}
-            {/* {
-              this.state.bookDetils.map((eachBook)=> (
-                    eachBook.map((item) => (
-                      <Card pname={item[0]} author={item[1]} price={item[2]} /> 
-                ))
-              )
-              )
-            }   */}
-   {/* {
-     
-              searchResults = Object.keys(this.state.results).map(key =>
-      <item key={key} value={key}>{this.state.results[key]}</item>
-    ) */}
-
-
-  {/* console.log(this.state.results); */}
-  {/* }  */}
-              {/* // => (
-                    <Card pname={item[0]} author={item[1]} price={item[2]} /> 
-                )) 
-            {/* } */}
-              {/* <Card pname={this.state.hashValues} /> */}
-              <button onClick={this.getAll}>Refresh</button>         
+          {
+            this.state.bookDetails.map((item) => (
+              // item.map((i) => {
+                <Card pname={item} author={item} price={item} />
+              // })
+            ))
+          }
+          {
+            console.log(this.state.bookDetails)
+          }
+            <button onClick={this.getAll}>Refresh</button>         
              
           </TabPanel>
 

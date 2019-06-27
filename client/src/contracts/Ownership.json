@@ -188,20 +188,8 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "getBooks",
+      "name": "getBookDetails",
       "outputs": [
-        {
-          "name": "",
-          "type": "string[]"
-        },
-        {
-          "name": "",
-          "type": "string[]"
-        },
-        {
-          "name": "",
-          "type": "uint256[]"
-        },
         {
           "name": "",
           "type": "string[]"

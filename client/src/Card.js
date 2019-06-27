@@ -37,7 +37,7 @@ class Card extends Component {
                         display: flex;
                         margin: 15px;
                         margin-bottom: 25px;
-                        radius: 4px;
+                        radius: 10px;
                         background-color: rgb(41, 54, 76);
                         
                     }
@@ -45,6 +45,8 @@ class Card extends Component {
                         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
                         cursor: pointer;
                         transition: 0.4s;
+                        radius: 10px;
+
                     }
                 `}
                 </style>
