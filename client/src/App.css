@@ -64,6 +64,7 @@
 
 .label {
   margin: auto;
+  color: white;
 }
 
 .hashLink {
@@ -79,7 +80,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color:  #7C7287;
+  background-color: rgb(41, 54, 76);
   width: 400px;
   border: 2px solid black;
   padding: 50px;

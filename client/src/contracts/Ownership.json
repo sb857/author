@@ -149,6 +149,29 @@
         {
           "name": "",
           "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "bookDetails",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
         }
       ],
       "name": "bookNames",
@@ -188,11 +211,11 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "getBookDetails",
+      "name": "getAllBooks",
       "outputs": [
         {
           "name": "",
-          "type": "string[]"
+          "type": "string[][]"
         }
       ],
       "payable": false,
@@ -272,7 +295,7 @@
       "outputs": [
         {
           "name": "",
-          "type": "uint256"
+          "type": "string"
         }
       ],
       "payable": false,
@@ -303,6 +326,25 @@
         },
         {
           "name": "ownerName",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_i",
+          "type": "uint256"
+        }
+      ],
+      "name": "uint2str",
+      "outputs": [
+        {
+          "name": "_uintAsString",
           "type": "string"
         }
       ],

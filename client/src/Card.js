@@ -6,17 +6,21 @@ class Card extends Component {
         return (
           
             <React.Fragment>
-                <div className="card" onClick={this.props.onClick}>
+                <div className="card" onClick={this.props.onClick} keyValue={this.props.keyValue}>
                     
                     <img className="image" alt="product" src={this.props.imag} align="middle"></img>
                     <div className="p-des">
-                        <div>{this.props.pname}</div>
-                        <div>{this.props.author}</div>
-                        <div>{this.props.price}</div>
+                        <p><strong>Book Name: </strong></p>
+                        <div>{""+this.props.pname}</div>
+                        <p><strong>Author: </strong></p>
+                        <div>{""+this.props.author}</div>
+                        <p><strong>Price: </strong></p>
+                        <div>{""+this.props.price}</div>
                     </div>
 
                 </div>
                 <style jsx="true">{`
+                    
                     .image {
                         width: 203px;
                         border-bottom: 1px solid #e8e8e8;
@@ -25,6 +29,7 @@ class Card extends Component {
                     }
                     .p-des {
                         padding: 15px;
+                        radius: 10px;
                     }
                     .p-des div {
                         font-size: 15px;
@@ -44,11 +49,9 @@ class Card extends Component {
                         
                     }
                     .card:hover {
-                        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
+                        box-shadow: 0 4px 8px 0 rgba(0,0,0,845);
                         cursor: pointer;
                         transition: 0.4s;
-                        radius: 10px;
-
                     }
                 `}
                 </style>
