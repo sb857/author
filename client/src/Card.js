@@ -6,7 +6,7 @@ class Card extends Component {
         return (
           
             <React.Fragment>
-                <div className="card" onClick={this.props.onClick} keyValue={this.props.keyValue}>
+                <div className="card" keyValue={this.props.keyValue}>
                     
                     <img className="image" alt="product" src={this.props.imag} align="middle"></img>
                     <div className="p-des">
@@ -16,6 +16,9 @@ class Card extends Component {
                         <div>{""+this.props.author}</div>
                         <p><strong>Price: </strong></p>
                         <div>{""+this.props.price}</div>
+                        <button onClick={this.props.buyClick}>Buy</button>
+                        <button onClick={this.props.rentClick}>Rent</button>
+                        <button onClick={this.props.viewClick}>View</button>
                     </div>
 
                 </div>

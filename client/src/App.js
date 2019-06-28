@@ -11,7 +11,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { visibleBook: false,bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: null, token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { current: null,visibleBook: false,bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props) {
     super(props)
@@ -25,6 +25,7 @@ class App extends Component {
     this.closeModal = this.closeModal.bind(this);
     this.searchFile = this.searchFile.bind(this);
     this.checkView = this.checkView.bind(this);//view timer
+    this.viewHandler = this.viewHandler.bind(this);
   }
 
 
@@ -53,7 +54,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0xb8b7b1039331dc16f9a8565e4103c1b80f1d5dd1";
+      instance.address = "0xb0a4261d3c235b0481faacaa4fe74cf914b5aa94";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -72,7 +73,7 @@ class App extends Component {
     }
   }
 
-  runTransaction = async () => {
+  uploadTransaction = async () => {
     const { accounts, contract, ipfsHash, contentName, ownerName, price } = this.state;
 
     await contract.methods.uploadContent(ipfsHash, contentName, ownerName, price).send({ from: accounts[0] });
@@ -87,6 +88,13 @@ class App extends Component {
     const { contract, accounts, clientName, token } = this.state
     await contract.methods.buyTokens(clientName, token).send({ from: accounts[0] });
   };
+
+  purchaseTransaction = async () => {
+    const { current, contract, accounts, clientName} = this.state
+    await contract.methods.purchase(current, clientName).send({from: accounts[0]});
+
+    console.log("Transaction Successful !");
+  }
 
   // searchForFile = async () => {
   //   const { contract, bookName} = this.state;
@@ -121,7 +129,7 @@ class App extends Component {
       setTimeout(
         function () {
           this.setState({ render: false });
-        }.bind(this), 5000);
+        }.bind(this), 30000);
     }
     else {
       this.setState({
@@ -156,7 +164,7 @@ class App extends Component {
         console.error(error)
         return
       }
-      this.setState({ ipfsHash: result[0].hash }, this.runTransaction)
+      this.setState({ ipfsHash: result[0].hash }, this.uploadTransaction)
       console.log('IPFS Hash Value: ', this.state.ipfsHash);
     })
   }
@@ -180,6 +188,16 @@ class App extends Component {
     this.setState(this.buyTokenTransaction);
   }
 
+  viewHandler(value) {
+    console.log(value);
+    this.setState({ipfsHash: value});  
+    this.openModal();
+  }
+
+  buyHandler(hash) {
+    this.setState({ipfsHash: hash});
+  }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -191,25 +209,26 @@ class App extends Component {
       return <div></div>
     }
 
-    const handler = function (e) {
-      console.log(e);
-      // this.setState({visibleBook: true});
+    const viewHandler = function (e) {
+      
     };
 
+    const rentHandler = function (hash) {
+      console.log(hash);
+    }
 
     const coins = Object.values(this.state.bookDetails).map((key, index) => (
-      <Card pname={key[0]} author={key[1]} price={key[2]} onClick={() => handler(index)} />
+      <Card pname={key[0]} author={key[1]} price={key[2]} viewClick={()=> this.viewHandler(key[3])} buyClick={()=> this.buyHandler(key[3])} />
     ));
 
     return (
       <div className="App">
-        {/* <input onKeyPress={this.myKeyPress}/> */}
         <div className="Header">
           <h1>Decentralized Content Sharing </h1>
           <p><strong>My Address: </strong>{this.state.accounts[0]}</p>
           <p>Upload to IPFS and Secure by Ethereum</p>
         </div>
-
+      
         <Tabs>
           <TabList className="tabs">
             <Tab>
@@ -254,14 +273,15 @@ class App extends Component {
           </TabPanel>
 
           <TabPanel >
-            {
-              coins
-            }
-            <button onClick={this.getAll}>Refresh</button>
+            
+            { coins }
 
-            <Modal visible={this.state.visibleBook} width="600" height="600" effect="fadeInUp" onClickAway={() => this.closeModal()}>
-              <p><strong>Book Details</strong></p>
+            <Modal visible={this.state.visible} width="600" height="600" effect="fadeInUp" onClickAway={() => this.closeModal()}>
+              <p><strong>Book Review</strong></p>
+              <iframe className="preview" src={this.loadHtml()} ></iframe>
             </Modal>
+
+            <button onClick={this.getAll}>Refresh</button>
           </TabPanel>
 
           <TabPanel className="tab">
