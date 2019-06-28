@@ -29,7 +29,6 @@ contract ContentShare {
     }
 
     mapping (string => FileMap) allFiles;
-    // mapping (uint => string) allHashes;
     mapping (address => Customer) customerDetails;
     mapping (address => Owner) ownerDetails;
 
@@ -40,8 +39,8 @@ contract ContentShare {
     string[] public hashValues;
     string[] public authors;
     string[] public bookNames;
-    uint[] public prices;
-    // string[] public foundIpfs;
+    string[] public prices;
+    string[][] public bookDetails;  
     
     function uploadContent(string memory ipfsHash, string memory contentName, string memory ownerName, uint price) public {
         
@@ -54,7 +53,8 @@ contract ContentShare {
             hashValues.push(ipfsHash) -1;
             authors.push(ownerName) -1;
             bookNames.push(contentName) -1;
-            prices.push(price) -1;
+            prices.push(uint2str(price)) -1;
+            bookDetails.push([ownerName, contentName, uint2str(price), ipfsHash]) ;
         }
 
         else
@@ -86,7 +86,17 @@ contract ContentShare {
 
         emit BookPurchase(customer.balance, author.balance);
     }
-
+    
+    function rent(string memory fileHash, uint validDays) public view returns(bool) {
+        
+        currentTime = block.timestamp;
+        finalTime = currentTime + days;
+        
+        if(currentTime >= finalTime + validDays * 1 days ) {
+            
+        }
+        
+    }
     function buyTokens(string memory name, uint tokens) public {
         
         Customer memory customer = customerDetails[msg.sender];
@@ -118,13 +128,26 @@ contract ContentShare {
         }
     }
     
-    function getBooks() public view returns (string[] memory, string[] memory, uint[] memory, string[] memory) {
-        return(bookNames, authors, prices, hashValues);
+    function getAllBooks() public view returns (string[][] memory) {
+        return(bookDetails);
     }
     
-    // function getHash() public view returns (string[] memory) {
-    //     return(hashValues);
-    // }
-    
-    
+    function uint2str(uint _i) public view returns (string memory _uintAsString) {
+        if (_i == 0) {
+            return "0";
+        }
+        uint j = _i;
+        uint len;
+        while (j != 0) {
+            len++;
+            j /= 10;
+        }
+        bytes memory bstr = new bytes(len);
+        uint k = len - 1;
+        while (_i != 0) {
+            bstr[k--] = byte(uint8(48 + _i % 10));
+            _i /= 10;
+        }
+        return string(bstr);
+    }
  }
