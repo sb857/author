@@ -16,21 +16,24 @@ contract ContentShare {
 
     struct Customer {
 
-        string customerName;
         uint balance;
-        // FileMap booksBought;
+        string[] books;
     }
 
-    struct Owner {
+    // struct Owner {
 
-        string ownerName;
-        uint balance;
-        // FileMap booksUploaded;
+    //     string ownerName;
+    //     uint balance;
+    //     // FileMap booksUploaded;
+    // }
+    
+    struct rentAgreement {
+        string[] book;
     }
-
+    
     mapping (string => FileMap) allFiles;
     mapping (address => Customer) customerDetails;
-    mapping (address => Owner) ownerDetails;
+    // mapping (address => Owner) ownerDetails;
 
     event FileLogStatus(bool status, uint timestamp, address owner, string ipfsHash);
     event BookPurchase(uint customerBalance, uint ownerBalance);
@@ -41,7 +44,7 @@ contract ContentShare {
     string[] public bookNames;
     string[] public prices;
     string[][] public bookDetails;  
-    
+
     function uploadContent(string memory ipfsHash, string memory contentName, string memory ownerName, uint price) public {
         
         if(allFiles[ipfsHash].timestamp == 0)
@@ -73,43 +76,49 @@ contract ContentShare {
         uint unitPrice = allFiles[fileHash].price;
         uint custBalance;
         uint ownerBalance;
-        
-        Owner memory author = ownerDetails[owner];
-        Customer memory customer = customerDetails[msg.sender];
-        customer.customerName = custName;
-        
+
+        Customer storage author = customerDetails[owner];
+        Customer storage customer = customerDetails[msg.sender];
+
         custBalance = customer.balance - unitPrice;
         ownerBalance = author.balance + unitPrice;
-
-        ownerDetails[owner] = Owner(author.ownerName, ownerBalance);
-        customerDetails[msg.sender] = Customer(custName, custBalance);
-
+        
+        // ownerDetails[owner] = Owner(author.ownerName, ownerBalance);
+        author.balance = ownerBalance;
+        // customerDetails[msg.sender] = Customer(custName, custBalance);
+        // customer.customerName = custName;
+        customer.balance = custBalance;
+        customer.books.push(fileHash) -1;
+        
         emit BookPurchase(customer.balance, author.balance);
     }
     
     function rent(string memory fileHash, uint validDays) public view returns(bool) {
         
-        currentTime = block.timestamp;
-        finalTime = currentTime + days;
+        uint currentTime = block.timestamp;
+        uint finalTime = currentTime + validDays * 1 days;
         
-        if(currentTime >= finalTime + validDays * 1 days ) {
-            
+        if(now == finalTime) {
+            return false;
         }
-        
+        else{
+            return true;
+        }
     }
-    function buyTokens(string memory name, uint tokens) public {
+    
+    function buyTokens(uint tokens) public {
         
         Customer memory customer = customerDetails[msg.sender];
-        uint totalBalance = customer.balance + tokens;
-                    
-        customerDetails[msg.sender] = Customer(name, totalBalance);
+
+        customer.balance += customer.balance + tokens;
+        // customerDetails[msg.sender] = Customer(name, totalBalance);
 
         emit TokenPurchase(customer.balance, msg.sender);
         
     }
     
-    function getCustomer(address custAddress) public view returns (string memory customerName, uint customerBalance) {
-        return (customerDetails[custAddress].customerName, customerDetails[custAddress].balance);
+    function getCustomer(address custAddress) public view returns (uint customerBalance, string[] memory books) {
+        return (customerDetails[custAddress].balance, customerDetails[custAddress].books);
     }
     
     function compareStrings (string memory a, string memory b) public view returns (bool) {
@@ -151,3 +160,4 @@ contract ContentShare {
         return string(bstr);
     }
  }
+
