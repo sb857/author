@@ -108,13 +108,8 @@ contract ContentShare {
     
     function buyTokens(uint tokens) public {
         
-        Customer memory customer = customerDetails[msg.sender];
+        customerDetails[msg.sender].balance += tokens;
 
-        customer.balance += customer.balance + tokens;
-        // customerDetails[msg.sender] = Customer(name, totalBalance);
-
-        emit TokenPurchase(customer.balance, msg.sender);
-        
     }
     
     function getCustomer(address custAddress) public view returns (uint customerBalance, string[] memory books) {
@@ -132,7 +127,7 @@ contract ContentShare {
             if(compareStrings(name, bookName)){
                 return (hashValues[i]);
                 // foundIpfs.push(hashValues[i]);
-            }
+            } 
             // return (foundIpfs);
         }
     }
@@ -160,4 +155,3 @@ contract ContentShare {
         return string(bstr);
     }
  }
-
