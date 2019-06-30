@@ -11,7 +11,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { current: null,visibleBook: false,bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props) {
     super(props)
@@ -38,7 +38,6 @@ class App extends Component {
         console.log("pressed!")
       }
     });
-    setInterval(() => this.getAll, 1000)
     setInterval(() => this.checkView(), 1000);//view timer
     try {
       // Get network provider and web3 instance.
@@ -54,7 +53,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0xb0a4261d3c235b0481faacaa4fe74cf914b5aa94";
+      instance.address = "0x0c38a6510266e279b91035b5a3495a0ee30b6a95";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -86,21 +85,23 @@ class App extends Component {
 
   buyTokenTransaction = async () => {
     const { contract, accounts, clientName, token } = this.state
-    await contract.methods.buyTokens(clientName, token).send({ from: accounts[0] });
+    await contract.methods.buyTokens(token).send({ from: accounts[0] });
   };
 
   purchaseTransaction = async () => {
-    const { current, contract, accounts, clientName} = this.state
-    await contract.methods.purchase(current, clientName).send({from: accounts[0]});
-
+    console.log("Working");
+    const { ipfsHash, contract, accounts, clientName } = this.state;
+    await contract.methods.purchase(ipfsHash, clientName).send({ from: accounts[0] });
     console.log("Transaction Successful !");
-  }
+  };
 
-  // searchForFile = async () => {
-  //   const { contract, bookName} = this.state;
-  //   const response = await contract.methods.getBooks(bookName).call();
-  //   this.setState({ fileMetadata: response });
-  // };
+  getCustomerCall = async () => {
+    const { contract, accounts, clientName } = this.state;
+    const response = await contract.methods.getCustomer(accounts[0]).call();
+    this.setState({wallet: response[0]._hex});
+
+    console.log("wallet: ", this.state.wallet);
+  };
 
   getAll = async () => {
     const { contract } = this.state;
@@ -129,7 +130,7 @@ class App extends Component {
       setTimeout(
         function () {
           this.setState({ render: false });
-        }.bind(this), 30000);
+        }.bind(this), 300000);
     }
     else {
       this.setState({
@@ -172,7 +173,7 @@ class App extends Component {
   calcTime(timestamp) {
     if (timestamp) {
       var date = new Date(timestamp * 1000);
-      return date.toUTCString();
+      return date.toLocaleTimeString;
     }
   }
 
@@ -190,12 +191,13 @@ class App extends Component {
 
   viewHandler(value) {
     console.log(value);
-    this.setState({ipfsHash: value});  
+    this.setState({ current: value });
     this.openModal();
   }
 
   buyHandler(hash) {
-    this.setState({ipfsHash: hash});
+    this.setState({ ipfsHash: hash }, this.purchaseTransaction);
+    // this.openModal();
   }
 
   render() {
@@ -209,17 +211,10 @@ class App extends Component {
       return <div></div>
     }
 
-    const viewHandler = function (e) {
-      
-    };
-
-    const rentHandler = function (hash) {
-      console.log(hash);
-    }
-
     const coins = Object.values(this.state.bookDetails).map((key, index) => (
-      <Card pname={key[0]} author={key[1]} price={key[2]} viewClick={()=> this.viewHandler(key[3])} buyClick={()=> this.buyHandler(key[3])} />
+      <Card pname={key[0]} author={key[1]} price={key[2]} viewClick={() => this.viewHandler(key[3])} buyClick={() => this.buyHandler(key[3])} />
     ));
+
 
     return (
       <div className="App">
@@ -228,7 +223,7 @@ class App extends Component {
           <p><strong>My Address: </strong>{this.state.accounts[0]}</p>
           <p>Upload to IPFS and Secure by Ethereum</p>
         </div>
-      
+
         <Tabs>
           <TabList className="tabs">
             <Tab>
@@ -240,11 +235,14 @@ class App extends Component {
             <Tab>
               Buy Tokens
             </Tab>
+            <Tab>
+              Profile
+            </Tab>
           </TabList>
 
           <TabPanel >
 
-            <h2>Select your file</h2>
+            <h3>Select your file</h3>
             <form className="form" onSubmit={this.submitFile}>
               <input type='file' onChange={this.getFile} />
               <br></br>
@@ -273,8 +271,8 @@ class App extends Component {
           </TabPanel>
 
           <TabPanel >
-            
-            { coins }
+
+            {coins}
 
             <Modal visible={this.state.visible} width="600" height="600" effect="fadeInUp" onClickAway={() => this.closeModal()}>
               <p><strong>Book Review</strong></p>
@@ -285,16 +283,22 @@ class App extends Component {
           </TabPanel>
 
           <TabPanel className="tab">
-            <h2>Buy Tokens</h2>
+            <h3>Buy Tokens</h3>
             <form className="form" onSubmit={this.buyToken}>
-              <label>Name: </label>
-              <input className="text" type='text' onInput={e => this.setState({ clientName: e.target.value })} /><br></br>
+             
               <label>Tokens: </label>
               <input className="text" type='text' onInput={e => this.setState({ token: e.target.value })} /><br></br>
               <button className="button"><span>Buy </span></button>
             </form>
           </TabPanel>
 
+          <TabPanel>
+            <h3>Profile</h3>
+            <button onClick={this.getCustomerCall}>Refresh</button>
+            
+            <p>Wallet Balance: {parseInt(this.state.wallet)} </p>
+            <p>BOOKS BOUGHT</p>
+          </TabPanel>
         </Tabs>
       </div>
     );

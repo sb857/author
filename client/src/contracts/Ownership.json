@@ -5,10 +5,6 @@
       "constant": false,
       "inputs": [
         {
-          "name": "name",
-          "type": "string"
-        },
-        {
           "name": "tokens",
           "type": "uint256"
         }
@@ -252,12 +248,12 @@
       "name": "getCustomer",
       "outputs": [
         {
-          "name": "customerName",
-          "type": "string"
-        },
-        {
           "name": "customerBalance",
           "type": "uint256"
+        },
+        {
+          "name": "books",
+          "type": "string[]"
         }
       ],
       "payable": false,
@@ -296,6 +292,29 @@
         {
           "name": "",
           "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "fileHash",
+          "type": "string"
+        },
+        {
+          "name": "validDays",
+          "type": "uint256"
+        }
+      ],
+      "name": "rent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
         }
       ],
       "payable": false,
