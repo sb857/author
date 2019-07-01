@@ -6,6 +6,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
 import Modal from 'react-awesome-modal';
 import Card from './Card.js';
+import ProfileBooks from './ProfileBooks.js';
 
 import "./App.css";
 
@@ -52,7 +53,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0xe1247fa300af57c2d88f478b0a4137a20808a558";
+      instance.address = "0xa97d7161e812471a5c28d7c1ccd780ebf03f67b9";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -210,10 +211,16 @@ class App extends Component {
     }
 
     const coins = Object.values(this.state.bookDetails).map((key, index) => (
-      <Card pname={key[0]} author={key[1]} price={key[2]} rentClick={()=> this.rentHandler(key[3])} viewClick={() => this.viewHandler(key[3])} buyClick={() => this.buyHandler(key[3])} />
+      <Card pname={key[1]} author={key[0]} price={key[2]} rentClick={()=> this.rentHandler(key[3])} viewClick={() => this.viewHandler(key[3])} buyClick={() => this.buyHandler(key[3])} />
     ));
 
-
+    const booksList = Object.values(this.state.booksBoughtName).map((key, index) => (
+      <ProfileBooks pname={key} />
+    ));
+    
+    const rentList = Object.values(this.state.rentedBooks).map((key, index) => (
+      <ProfileBooks pname={key} />
+    ));
     return (
       <div className="App">
         <div className="Header">
@@ -302,9 +309,10 @@ class App extends Component {
             
             <p>Wallet Balance: {parseInt(this.state.wallet)} </p>
             <p><strong>BOOKS BOUGHT</strong></p>
-            <p onClick={console.log('Bought Books')}>{Object.values(this.state.booksBoughtName)}</p>
-            <p><strong>RENTED BOOKS</strong></p>
-            <p onClick={console.log('Bought Books')}>{Object.values(this.state.rentedBooks)}</p>
+            {booksList}
+      
+            <p className="rentLabel"><strong>RENTED BOOKS</strong></p>
+            {rentList}
           </TabPanel>
         </Tabs>
       </div>

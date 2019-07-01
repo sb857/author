@@ -34,10 +34,10 @@
   width: 500px;
 }
 
-/* .uploadForm {
-  display: flex;
-  flex-direction: row;
-} */
+.rentLabel {
+  margin-top: 400px;
+}
+
 .textIn {
   width: 80%;
   height: 20%;

@@ -1,24 +1,19 @@
 import React, { Component } from 'react';
 
-class Card extends Component {
+class ProfileBooks extends Component {
     render() {
         
         return (
           
             <React.Fragment>
-                <div className="card" keyValue={this.props.keyValue}>
+                <div className="card" keyValue={this.props.keyValue} onClick={this.props.onClick}>
                     
                     <img className="image" alt="product" src={this.props.imag} align="middle"></img>
                     <div className="p-des">
                         <p><strong>Book Name: </strong></p>
                         <div>{this.props.pname}</div>
-                        <p><strong>Author: </strong></p>
-                        <div>{this.props.author}</div>
-                        <p><strong>Price: </strong></p>
-                        <div>{this.props.price}</div>
-                        <button onClick={this.props.buyClick}>Buy</button>
-                        <button onClick={this.props.rentClick}>Rent</button>
-                        <button onClick={this.props.viewClick}>View</button>
+                        {/* <p><strong>Author: </strong></p>
+                        <div>{this.props.author}</div> */}
                     </div>
 
                 </div>
@@ -127,4 +122,4 @@ class Card extends Component {
                 //         }
 
                                           
-export default Card;
+export default ProfileBooks;

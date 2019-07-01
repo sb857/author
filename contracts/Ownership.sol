@@ -131,7 +131,6 @@ contract ContentShare {
     }
     
     function getCustomer(address customer) public view returns (uint customerBalance, string[] memory books, string[] memory booksName, string[] memory bookRent, string[] memory booksRentName) {
-        return (customerDetails[customer].balance, customerDetails[customer].booksBought, customerDetails[customer].booksBoughtName, customerDetails[customer].booksRentName, customerDetails[customer].booksRent);
     }
     
     function compareStrings (string memory a, string memory b) public view returns (bool) {
