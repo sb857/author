@@ -21,6 +21,8 @@ contract ContentShare {
         uint balance;
         string[] booksBought;
         string[] booksBoughtName;
+        string[] booksRent;
+        string[] booksRentName;
         mapping (string => rentAgreement) rentDetails;
     }
 
@@ -82,13 +84,10 @@ contract ContentShare {
         custBalance = customer.balance - unitPrice;
         ownerBalance = author.balance + unitPrice;
         
-        // ownerDetails[owner] = Owner(author.ownerName, ownerBalance);
         author.balance = ownerBalance;
-        // customerDetails[msg.sender] = Customer(custName, custBalance);
-        // customer.customerName = custName;
         customer.balance = custBalance;
         customer.booksBought.push(fileHash) -1;
-        
+        customer.booksBoughtName.push(search(fileHash)) -1;
         emit BookPurchase(customer.balance, author.balance);
     }
     
@@ -108,6 +107,10 @@ contract ContentShare {
         custBalance = customer.balance - rentPrice;
         ownerBalance = author.balance + rentPrice;
         
+        author.balance = ownerBalance;
+        customer.balance = custBalance;
+        customer.booksRent.push(fileHash) -1;
+        customer.booksRentName.push(search(fileHash)) -1;
         customer.rentDetails[fileHash] = rentAgreement(currentTime, finalTime);
     }
     
@@ -127,23 +130,20 @@ contract ContentShare {
         customerDetails[msg.sender].balance += tokens;
     }
     
-    function getCustomer(address custAddress) public view returns (uint customerBalance, string[] memory books) {
-        return (customerDetails[custAddress].balance, customerDetails[custAddress].booksBought);
+    function getCustomer(address customer) public view returns (uint customerBalance, string[] memory books, string[] memory booksName, string[] memory bookRent, string[] memory booksRentName) {
+        return (customerDetails[customer].balance, customerDetails[customer].booksBought, customerDetails[customer].booksBoughtName, customerDetails[customer].booksRentName, customerDetails[customer].booksRent);
     }
     
     function compareStrings (string memory a, string memory b) public view returns (bool) {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))) );
     }
     
-    
     function getBooks(string memory bookName) public view returns (string memory) {
-        for(uint i=0; i<=hashValues.length; i++){
+        for(uint i=0; i<=hashValues.length; i++) {
             string memory name = allFiles[hashValues[i]].contentName;
             if(compareStrings(name, bookName)){
                 return (hashValues[i]);
-                // foundIpfs.push(hashValues[i]);
             } 
-            // return (foundIpfs);
         }
     }
     

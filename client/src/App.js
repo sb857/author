@@ -302,9 +302,9 @@ class App extends Component {
             
             <p>Wallet Balance: {parseInt(this.state.wallet)} </p>
             <p><strong>BOOKS BOUGHT</strong></p>
-            <p>{Object.values(this.state.booksBoughtName)}</p>
+            <p onClick={console.log('Bought Books')}>{Object.values(this.state.booksBoughtName)}</p>
             <p><strong>RENTED BOOKS</strong></p>
-            <p>{Object.values(this.state.rentedBooks)}</p>
+            <p onClick={console.log('Bought Books')}>{Object.values(this.state.rentedBooks)}</p>
           </TabPanel>
         </Tabs>
       </div>
