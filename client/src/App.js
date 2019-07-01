@@ -11,7 +11,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props) {
     super(props)
@@ -52,7 +52,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0x23c8a5b0ab2beed63cbd8c208d1f4d6a763ff4cf";
+      instance.address = "0xe1247fa300af57c2d88f478b0a4137a20808a558";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -94,8 +94,8 @@ class App extends Component {
 
   getCustomerCall = async () => {
     const { contract, accounts, clientName } = this.state;
-    const response = await contract.methods.getCustomer().call();
-    this.setState({booksBought: response[1], wallet: response[0]._hex, booksBoughtName: response[2]});
+    const response = await contract.methods.getCustomer(accounts[0]).call();
+    this.setState({booksBought: response[1], wallet: response[0]._hex, booksBoughtName: response[2], rentedBooks: response[3]});
     console.log("Books Bought : ", response);
   };
 
@@ -104,6 +104,11 @@ class App extends Component {
     const response = await contract.methods.getAllBooks().call();
     this.setState({ bookDetails: response });
     console.log("books: ", this.state.bookDetails);
+  };
+
+  rentTranact = async () => {
+    const { contract, accounts, rentHash} = this.state;
+    await contract.methods.rentTransaction(rentHash).send({from: accounts[0]});
   };
 
   loadHtml() {
@@ -184,9 +189,13 @@ class App extends Component {
     this.openModal();
   }
 
+  rentHandler(hash) {
+    console.log(hash);
+    this.setState({rentHash: hash}, this.rentTranact);
+  }
+
   buyHandler(hash) {
     this.setState({ ipfsHash: hash }, this.purchaseTransaction);
-    // this.openModal();
   }
 
   render() {
@@ -201,7 +210,7 @@ class App extends Component {
     }
 
     const coins = Object.values(this.state.bookDetails).map((key, index) => (
-      <Card pname={key[0]} author={key[1]} price={key[2]} viewClick={() => this.viewHandler(key[3])} buyClick={() => this.buyHandler(key[3])} />
+      <Card pname={key[0]} author={key[1]} price={key[2]} rentClick={()=> this.rentHandler(key[3])} viewClick={() => this.viewHandler(key[3])} buyClick={() => this.buyHandler(key[3])} />
     ));
 
 
@@ -292,8 +301,10 @@ class App extends Component {
             <button onClick={this.getCustomerCall}>Refresh</button>
             
             <p>Wallet Balance: {parseInt(this.state.wallet)} </p>
-            <p>BOOKS BOUGHT: {Object.values(this.state.booksBoughtName)}</p>
-
+            <p><strong>BOOKS BOUGHT</strong></p>
+            <p>{Object.values(this.state.booksBoughtName)}</p>
+            <p><strong>RENTED BOOKS</strong></p>
+            <p>{Object.values(this.state.rentedBooks)}</p>
           </TabPanel>
         </Tabs>
       </div>
