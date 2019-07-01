@@ -10,30 +10,29 @@ contract ContentShare {
         address owner;
         string contentName;
         string ownerName;
-        uint price;
+        uint priceBuy;
+        uint priceRent;
+        uint rentDays;
         // address[] customer;
     }
 
     struct Customer {
 
         uint balance;
-        string[] books;
+        string[] booksBought;
+        string[] booksBoughtName;
+        mapping (string => rentAgreement) rentDetails;
     }
 
-    // struct Owner {
-
-    //     string ownerName;
-    //     uint balance;
-    //     // FileMap booksUploaded;
-    // }
-    
     struct rentAgreement {
-        string[] book;
+        
+        // string booksName;
+        uint boughtOn;
+        uint validFor;
     }
     
     mapping (string => FileMap) allFiles;
     mapping (address => Customer) customerDetails;
-    // mapping (address => Owner) ownerDetails;
 
     event FileLogStatus(bool status, uint timestamp, address owner, string ipfsHash);
     event BookPurchase(uint customerBalance, uint ownerBalance);
@@ -45,18 +44,18 @@ contract ContentShare {
     string[] public prices;
     string[][] public bookDetails;  
 
-    function uploadContent(string memory ipfsHash, string memory contentName, string memory ownerName, uint price) public {
+    function uploadContent(string memory ipfsHash, string memory contentName, string memory ownerName, uint price, uint rentPrice, uint rentDays) public {
         
         if(allFiles[ipfsHash].timestamp == 0)
         {
-            allFiles[ipfsHash] = FileMap(block.timestamp, msg.sender, contentName, ownerName, price);
+            allFiles[ipfsHash] = FileMap(block.timestamp, msg.sender, contentName, ownerName, price, rentPrice, rentDays);
             emit FileLogStatus(true, block.timestamp, msg.sender, ipfsHash);
             // allHashes[filecount] = ipfsHash;
             // filecount++;
             hashValues.push(ipfsHash) -1;
-            authors.push(ownerName) -1;
-            bookNames.push(contentName) -1;
-            prices.push(uint2str(price)) -1;
+            // authors.push(ownerName) -1;
+            // bookNames.push(contentName) -1;
+            // prices.push(uint2str(price)) -1;
             bookDetails.push([ownerName, contentName, uint2str(price), ipfsHash]) ;
         }
 
@@ -66,14 +65,14 @@ contract ContentShare {
         }
     }
 
-    function search(string memory fileHash) public view returns (uint timestamp, address owner, uint price, string memory ownerName) {
-        return (allFiles[fileHash].timestamp, allFiles[fileHash].owner, allFiles[fileHash].price, allFiles[fileHash].ownerName);
+    function search(string memory fileHash) public view returns (string memory contentName) {
+        return (allFiles[fileHash].contentName);
     }
 
     function purchase(string memory fileHash, string memory custName) public {
 
         address owner = allFiles[fileHash].owner;
-        uint unitPrice = allFiles[fileHash].price;
+        uint unitPrice = allFiles[fileHash].priceBuy;
         uint custBalance;
         uint ownerBalance;
 
@@ -88,20 +87,37 @@ contract ContentShare {
         // customerDetails[msg.sender] = Customer(custName, custBalance);
         // customer.customerName = custName;
         customer.balance = custBalance;
-        customer.books.push(fileHash) -1;
+        customer.booksBought.push(fileHash) -1;
         
         emit BookPurchase(customer.balance, author.balance);
     }
     
-    function rent(string memory fileHash, uint validDays) public view returns(bool) {
+    function rentTransaction(string memory fileHash) public {
         
         uint currentTime = block.timestamp;
-        uint finalTime = currentTime + validDays * 1 days;
+        address owner = allFiles[fileHash].owner;
+        uint rentDays = allFiles[fileHash].rentDays;
+        uint finalTime = currentTime + rentDays * 1 days;
+        uint rentPrice = allFiles[fileHash].priceRent;
+        uint custBalance;
+        uint ownerBalance;
         
-        if(now == finalTime) {
+        Customer storage author = customerDetails[owner];
+        Customer storage customer = customerDetails[msg.sender];
+        
+        custBalance = customer.balance - rentPrice;
+        ownerBalance = author.balance + rentPrice;
+        
+        customer.rentDetails[fileHash] = rentAgreement(currentTime, finalTime);
+    }
+    
+    function getRentUpdate(address customer, string memory fileHash) public view returns (bool) {
+        
+        Customer storage customer = customerDetails[msg.sender];
+        if(now == customer.rentDetails[fileHash].validFor) {
             return false;
         }
-        else{
+        else {
             return true;
         }
     }
@@ -109,11 +125,10 @@ contract ContentShare {
     function buyTokens(uint tokens) public {
         
         customerDetails[msg.sender].balance += tokens;
-
     }
     
     function getCustomer(address custAddress) public view returns (uint customerBalance, string[] memory books) {
-        return (customerDetails[custAddress].balance, customerDetails[custAddress].books);
+        return (customerDetails[custAddress].balance, customerDetails[custAddress].booksBought);
     }
     
     function compareStrings (string memory a, string memory b) public view returns (bool) {
