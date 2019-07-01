@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-
+  margin-bottom: 40px;
 }
 
 .App-logo {
@@ -34,6 +34,10 @@
   width: 500px;
 }
 
+/* .uploadForm {
+  display: flex;
+  flex-direction: row;
+} */
 .textIn {
   width: 80%;
   height: 20%;
@@ -62,7 +66,7 @@
   padding: 12px 20px 12px 40px;
 }
 
-.label {
+label {
   margin: auto;
   color: white;
 }

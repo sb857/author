@@ -11,7 +11,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props) {
     super(props)
@@ -23,7 +23,6 @@ class App extends Component {
     this.toggle = this.toggle.bind(this);
     this.buyToken = this.buyToken.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.searchFile = this.searchFile.bind(this);
     this.checkView = this.checkView.bind(this);//view timer
     this.viewHandler = this.viewHandler.bind(this);
   }
@@ -53,7 +52,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0x0c38a6510266e279b91035b5a3495a0ee30b6a95";
+      instance.address = "0x23c8a5b0ab2beed63cbd8c208d1f4d6a763ff4cf";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -73,15 +72,13 @@ class App extends Component {
   }
 
   uploadTransaction = async () => {
-    const { accounts, contract, ipfsHash, contentName, ownerName, price } = this.state;
+    const { accounts, contract, ipfsHash, contentName, ownerName, price, rent, rentDays } = this.state;
 
-    await contract.methods.uploadContent(ipfsHash, contentName, ownerName, price).send({ from: accounts[0] });
+    await contract.methods.uploadContent(ipfsHash, contentName, ownerName, price, rent, rentDays).send({ from: accounts[0] });
 
-    const response = await contract.methods.search(ipfsHash).call();
-
-    this.setState({ storageValue: response });
     console.log("storage Value: ", this.state.storageValue);
   };
+
 
   buyTokenTransaction = async () => {
     const { contract, accounts, clientName, token } = this.state
@@ -97,10 +94,9 @@ class App extends Component {
 
   getCustomerCall = async () => {
     const { contract, accounts, clientName } = this.state;
-    const response = await contract.methods.getCustomer(accounts[0]).call();
-    this.setState({wallet: response[0]._hex});
-
-    console.log("wallet: ", this.state.wallet);
+    const response = await contract.methods.getCustomer().call();
+    this.setState({booksBought: response[1], wallet: response[0]._hex, booksBoughtName: response[2]});
+    console.log("Books Bought : ", response);
   };
 
   getAll = async () => {
@@ -113,13 +109,6 @@ class App extends Component {
   loadHtml() {
     return (`https://ipfs.io/ipfs/${this.state.ipfsHash}`);
     // return (`https://wix.com`);
-  }
-
-  searchFile(event) {
-    event.preventDefault()
-    console.log("Push");
-    // this.setState(this.searchForFile);
-    // console.log("Data: ", this.state.fileMetadata);
   }
 
   openModal() {
@@ -255,10 +244,16 @@ class App extends Component {
               <label>Price: </label>
               <input className="text" type='text' onInput={e => this.setState({ price: e.target.value })} />
               <br></br>
+              <label>Rent Price: </label>
+              <input className="text" type='text' onInput={e => this.setState({ rent: e.target.value })} />
+              <br></br>
+              <label>Rent Days: </label>
+              <input className="text" type='text' onInput={e => this.setState({ rentDays: e.target.value })} />
+              <br></br>
               <br></br>
               <button className="button"><span>Upload </span></button><br></br>
 
-              <p><strong>IPFS Hash:</strong></p>
+              <label><strong>IPFS Hash:</strong></label>
               <p className="hashLink" onClick={() => this.openModal()}>{this.state.ipfsHash}</p>
 
             </form>
@@ -297,7 +292,8 @@ class App extends Component {
             <button onClick={this.getCustomerCall}>Refresh</button>
             
             <p>Wallet Balance: {parseInt(this.state.wallet)} </p>
-            <p>BOOKS BOUGHT</p>
+            <p>BOOKS BOUGHT: {Object.values(this.state.booksBoughtName)}</p>
+
           </TabPanel>
         </Tabs>
       </div>

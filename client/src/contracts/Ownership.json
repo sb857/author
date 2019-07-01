@@ -37,6 +37,20 @@
       "constant": false,
       "inputs": [
         {
+          "name": "fileHash",
+          "type": "string"
+        }
+      ],
+      "name": "rentTransaction",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
           "name": "ipfsHash",
           "type": "string"
         },
@@ -50,6 +64,14 @@
         },
         {
           "name": "price",
+          "type": "uint256"
+        },
+        {
+          "name": "rentPrice",
+          "type": "uint256"
+        },
+        {
+          "name": "rentDays",
           "type": "uint256"
         }
       ],
@@ -239,12 +261,7 @@
     },
     {
       "constant": true,
-      "inputs": [
-        {
-          "name": "custAddress",
-          "type": "address"
-        }
-      ],
+      "inputs": [],
       "name": "getCustomer",
       "outputs": [
         {
@@ -254,6 +271,33 @@
         {
           "name": "books",
           "type": "string[]"
+        },
+        {
+          "name": "booksName",
+          "type": "string[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "customer",
+          "type": "address"
+        },
+        {
+          "name": "fileHash",
+          "type": "string"
+        }
+      ],
+      "name": "getRentUpdate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
         }
       ],
       "payable": false,
@@ -304,47 +348,12 @@
         {
           "name": "fileHash",
           "type": "string"
-        },
-        {
-          "name": "validDays",
-          "type": "uint256"
-        }
-      ],
-      "name": "rent",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "fileHash",
-          "type": "string"
         }
       ],
       "name": "search",
       "outputs": [
         {
-          "name": "timestamp",
-          "type": "uint256"
-        },
-        {
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "name": "price",
-          "type": "uint256"
-        },
-        {
-          "name": "ownerName",
+          "name": "contentName",
           "type": "string"
         }
       ],
