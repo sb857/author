@@ -53,7 +53,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0xa97d7161e812471a5c28d7c1ccd780ebf03f67b9";
+      instance.address = "0x5dd6ba0addc2c156b668032de594d1b4278d825a";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -96,7 +96,7 @@ class App extends Component {
   getCustomerCall = async () => {
     const { contract, accounts, clientName } = this.state;
     const response = await contract.methods.getCustomer(accounts[0]).call();
-    this.setState({booksBought: response[1], wallet: response[0]._hex, booksBoughtName: response[2], rentedBooks: response[3]});
+    this.setState({ wallet: response[0]._hex, booksBought: response[1], rentedBooks: response[2]});
     console.log("Books Bought : ", response);
   };
 
@@ -214,12 +214,12 @@ class App extends Component {
       <Card pname={key[1]} author={key[0]} price={key[2]} rentClick={()=> this.rentHandler(key[3])} viewClick={() => this.viewHandler(key[3])} buyClick={() => this.buyHandler(key[3])} />
     ));
 
-    const booksList = Object.values(this.state.booksBoughtName).map((key, index) => (
-      <ProfileBooks pname={key} />
+    const booksList = Object.values(this.state.booksBought).map((key, index) => (
+      <ProfileBooks pname={key[1]} onClick={()=> this.viewHandler(key[0])}/>
     ));
     
     const rentList = Object.values(this.state.rentedBooks).map((key, index) => (
-      <ProfileBooks pname={key} />
+      <ProfileBooks pname={key[1]} onClick={()=> this.viewHandler(key[0])}/>
     ));
     return (
       <div className="App">
@@ -307,10 +307,14 @@ class App extends Component {
             <h3>Profile</h3>
             <button onClick={this.getCustomerCall}>Refresh</button>
             
-            <p>Wallet Balance: {parseInt(this.state.wallet)} </p>
+            <p><strong>Wallet Balance: </strong>{parseInt(this.state.wallet)} </p>
             <p><strong>BOOKS BOUGHT</strong></p>
             {booksList}
-      
+            <Modal visible={this.state.visible} width="600" height="600" effect="fadeInUp" onClickAway={() => this.closeModal()}>
+              <p><strong>Book </strong></p>
+              <iframe className="preview" src={this.loadHtml()} ></iframe>
+            </Modal>
+
             <p className="rentLabel"><strong>RENTED BOOKS</strong></p>
             {rentList}
           </TabPanel>

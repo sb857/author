@@ -263,7 +263,7 @@
       "constant": true,
       "inputs": [
         {
-          "name": "customer",
+          "name": "custAddress",
           "type": "address"
         }
       ],
@@ -274,20 +274,12 @@
           "type": "uint256"
         },
         {
-          "name": "books",
-          "type": "string[]"
+          "name": "boughtBooks",
+          "type": "string[][]"
         },
         {
-          "name": "booksName",
-          "type": "string[]"
-        },
-        {
-          "name": "bookRent",
-          "type": "string[]"
-        },
-        {
-          "name": "booksRentName",
-          "type": "string[]"
+          "name": "rentBooks",
+          "type": "string[][]"
         }
       ],
       "payable": false,
