@@ -12,7 +12,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { visibleTimer: false, rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props) {
     super(props)
@@ -26,6 +26,7 @@ class App extends Component {
     this.closeModal = this.closeModal.bind(this);
     this.checkView = this.checkView.bind(this);//view timer
     this.viewHandler = this.viewHandler.bind(this);
+    this.viewTimerHandler = this.viewTimerHandler.bind(this);
   }
 
 
@@ -53,7 +54,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0xc164c9acb20a91495ff7ccda45c42c04b99a88c5";
+      instance.address = "0x2c9737c75d5fafa21c8c5d78d438426affe096d4";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -135,6 +136,26 @@ class App extends Component {
     }
   }
 
+  openViewModal(hash) {
+    if (this.state.render) {
+      this.setState({
+        visibleTimer: true,
+        ipfsHash: hash
+      });
+      setTimeout(
+        function () {
+          this.setState({ render: false });
+        }.bind(this), 10000);
+    }
+  }
+
+  closeViewModal() {
+    this.setState({
+      visibleTimer: false
+    });
+  }
+
+  
   closeModal() {
     this.setState({
       visible: false
@@ -185,6 +206,11 @@ class App extends Component {
     this.setState(this.buyTokenTransaction);
   }
 
+  viewTimerHandler(value) {
+    console.log(value);
+    this.openViewModal(value);
+  }
+
   viewHandler(value) {
     console.log(value);
     this.openModal(value);
@@ -208,7 +234,7 @@ class App extends Component {
     // }
 
     const coins = Object.values(this.state.bookDetails).map((key, index) => (
-      <Card pname={key[0]} author={key[1]} price={key[2]} rentClick={()=> this.rentHandler(key[3])} viewClick={() => this.viewHandler(key[3])} buyClick={() => this.buyHandler(key[3])} />
+      <Card pname={key[0]} author={key[1]} price={key[2]} rentClick={()=> this.rentHandler(key[3])}  buyClick={() => this.buyHandler(key[3])} />
     ));
 
     const booksList = Object.values(this.state.booksBought).map((key, index) => (
@@ -254,21 +280,20 @@ class App extends Component {
               <label>Author: </label>
               <input className="text" type='text' onInput={e => this.setState({ ownerName: e.target.value })} />
               <br></br>
-              <label>Price: </label>
+              <label>Purchase Price: </label>
               <input className="text" type='text' onInput={e => this.setState({ price: e.target.value })} />
               <br></br>
               <label>Rent Price: </label>
               <input className="text" type='text' onInput={e => this.setState({ rent: e.target.value })} />
               <br></br>
-              <label>Rent Days: </label>
+              <label>Rent Duration: </label>
               <input className="text" type='text' onInput={e => this.setState({ rentDays: e.target.value })} />
               <br></br>
               <br></br>
               <button className="button"><span>Upload </span></button><br></br>
 
               <label><strong>IPFS Hash:</strong></label>
-              <p className="hashLink" onClick={() => this.openModal()}>{this.state.ipfsHash}</p>
-
+              <p className="hashLink" onClick={() => this.openModal(this.state.ipfsHash)}>{this.state.ipfsHash}</p>
             </form>
 
             <Modal visible={this.state.visible} width="600" height="600" effect="fadeInUp" onClickAway={() => this.closeModal()}>
@@ -312,7 +337,7 @@ class App extends Component {
               <iframe className="preview" src={this.loadHtml()} ></iframe>
             </Modal>
 
-            <p className="rentLabel"><strong>RENTED BOOKS</strong></p>
+            <p className="rentLabel"><strong>BOOKS RENTED</strong></p>
             {rentList}
           </TabPanel>
         </Tabs>

@@ -18,7 +18,7 @@ class Card extends Component {
                         <div>{this.props.price}</div>
                         <button onClick={this.props.buyClick}>Buy</button>
                         <button onClick={this.props.rentClick}>Rent</button>
-                        <button onClick={this.props.viewClick}>View</button>
+                        {/* <button onClick={this.props.viewClick}>View</button> */}
                     </div>
 
                 </div>
