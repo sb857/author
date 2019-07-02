@@ -53,7 +53,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0x5dd6ba0addc2c156b668032de594d1b4278d825a";
+      instance.address = "0xc164c9acb20a91495ff7ccda45c42c04b99a88c5";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -89,7 +89,7 @@ class App extends Component {
   purchaseTransaction = async () => {
     console.log("Working");
     const { ipfsHash, contract, accounts, clientName } = this.state;
-    await contract.methods.purchase(ipfsHash, clientName).send({ from: accounts[0] });
+    await contract.methods.purchase(ipfsHash, clientName).send({from: accounts[0]});
     console.log("Transaction Successful !");
   };
 
@@ -117,15 +117,16 @@ class App extends Component {
     // return (`https://wix.com`);
   }
 
-  openModal() {
+  openModal(hash) {
     if (this.state.render) {
       this.setState({
-        visible: true
+        visible: true,
+        ipfsHash: hash
       });
-      setTimeout(
-        function () {
-          this.setState({ render: false });
-        }.bind(this), 300000);
+      // setTimeout(
+      //   function () {
+      //     this.setState({ render: false });
+      //   }.bind(this), 100000);
     }
     else {
       this.setState({
@@ -186,8 +187,7 @@ class App extends Component {
 
   viewHandler(value) {
     console.log(value);
-    this.setState({ current: value });
-    this.openModal();
+    this.openModal(value);
   }
 
   rentHandler(hash) {
@@ -206,12 +206,9 @@ class App extends Component {
     // var hidden = {
     // 	display: this.state.shown ? "block" : "none"
     // }
-    if (this.state.prnt) {
-      return <div></div>
-    }
 
     const coins = Object.values(this.state.bookDetails).map((key, index) => (
-      <Card pname={key[1]} author={key[0]} price={key[2]} rentClick={()=> this.rentHandler(key[3])} viewClick={() => this.viewHandler(key[3])} buyClick={() => this.buyHandler(key[3])} />
+      <Card pname={key[0]} author={key[1]} price={key[2]} rentClick={()=> this.rentHandler(key[3])} viewClick={() => this.viewHandler(key[3])} buyClick={() => this.buyHandler(key[3])} />
     ));
 
     const booksList = Object.values(this.state.booksBought).map((key, index) => (
@@ -252,10 +249,10 @@ class App extends Component {
               <input type='file' onChange={this.getFile} />
               <br></br>
               <label>Title: </label>
-              <input className="text" type='text' onInput={e => this.setState({ ownerName: e.target.value })} />
+              <input className="text" type='text' onInput={e => this.setState({ contentName: e.target.value })} />
               <br></br>
               <label>Author: </label>
-              <input className="text" type='text' onInput={e => this.setState({ contentName: e.target.value })} />
+              <input className="text" type='text' onInput={e => this.setState({ ownerName: e.target.value })} />
               <br></br>
               <label>Price: </label>
               <input className="text" type='text' onInput={e => this.setState({ price: e.target.value })} />

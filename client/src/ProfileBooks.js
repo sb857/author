@@ -28,11 +28,13 @@ class ProfileBooks extends Component {
                     .p-des {
                         padding: 15px;
                         radius: 10px;
+                        
                     }
                     .p-des div {
                         font-size: 15px;
                         padding-bottom: 10px;
                         color: white;
+                        
                     }
                     
                     .card {
@@ -43,7 +45,7 @@ class ProfileBooks extends Component {
                         margin: 15px;
                         margin-bottom: 25px;
                         radius: 10px;
-                        background-color: rgb(41, 54, 76);
+                        background-color: rgb(91, 94, 99);
                         
                     }
                     .card:hover {

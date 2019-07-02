@@ -48,7 +48,7 @@ class Card extends Component {
                         margin: 15px;
                         margin-bottom: 25px;
                         radius: 10px;
-                        background-color: rgb(41, 54, 76);
+                        background-color: rgb(91, 94, 99);
                         
                     }
                     .card:hover {
