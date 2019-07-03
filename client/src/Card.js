@@ -11,9 +11,9 @@ class Card extends Component {
                     <img className="image" alt="product" src={this.props.imag} align="middle"></img>
                     <div className="p-des">
                         <p><strong>Book Name: </strong></p>
-                        <div>{this.props.pname}</div>
-                        <p><strong>Author: </strong></p>
                         <div>{this.props.author}</div>
+                        <p><strong>Author: </strong></p>
+                        <div>{this.props.pname}</div>
                         <p><strong>Price: </strong></p>
                         <div>{this.props.price}</div>
                         <button onClick={this.props.buyClick}>Buy</button>

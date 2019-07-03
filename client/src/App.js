@@ -12,7 +12,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { visibleTimer: false, rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { exists: false, visibleTimer: false, rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props) {
     super(props)
@@ -40,6 +40,7 @@ class App extends Component {
       }
     });
     setInterval(() => this.checkView(), 1000);//view timer
+
     try {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
@@ -54,7 +55,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0x2c9737c75d5fafa21c8c5d78d438426affe096d4";
+      instance.address = "0x787b2b8a024bd6f01a142cefb6e8023228d3b223";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -66,7 +67,7 @@ class App extends Component {
       console.error(error);
     }
   };
-
+  
   checkView() { //view timer
     if (this.state.render == false) {
       this.closeModal();
@@ -182,9 +183,32 @@ class App extends Component {
         console.error(error)
         return
       }
-      this.setState({ ipfsHash: result[0].hash }, this.uploadTransaction)
-      console.log('IPFS Hash Value: ', this.state.ipfsHash);
+      this.setState({ ipfsHash: result[0].hash })
+      console.log("Book Details: ",this.state.bookDetails);
+      Object.values(this.state.bookDetails).map((key, index) => {
+        console.log(key[3])
+        if(key[3] == this.state.ipfsHash) {
+          console.log("exists" + this.state.exists)
+          return(this.setState({exists: true}))
+        }
+      });
+      if(this.state.exists) {
+        alert("This book already exists!")
+      }
+      else {
+        this.setState(this.uploadTransaction)
+        console.log('IPFS Hash Value: ', this.state.ipfsHash);
+      }
     })
+
+    ipfs.files.add(this.state.imageBuffer, (error, result) => {
+      if (error) {
+        console.error(error)
+        return
+      }
+      
+    })
+
   }
 
   calcTime(timestamp) {
@@ -247,7 +271,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="Header">
-          <h1>Decentralized Content Sharing </h1>
+          <h1>auth.or</h1>
           <p><strong>My Address: </strong>{this.state.accounts[0]}</p>
           <p>Upload to IPFS and Secure by Ethereum</p>
         </div>
@@ -272,26 +296,23 @@ class App extends Component {
 
             <h3>Select your file</h3>
             <form className="form" onSubmit={this.submitFile}>
-              <input type='file' onChange={this.getFile} />
+              <label>Select Book: </label>
+              <input type='file' onChange={this.getFile} accept='application/pdf' />
+              <label>Select Book Image: </label>
+              <input type='file' onChange={this.getFile} accept='image/*'/>
               <br></br>
               <label>Title: </label>
               <input className="text" type='text' onInput={e => this.setState({ contentName: e.target.value })} />
-              <br></br>
               <label>Author: </label>
               <input className="text" type='text' onInput={e => this.setState({ ownerName: e.target.value })} />
-              <br></br>
               <label>Purchase Price: </label>
               <input className="text" type='text' onInput={e => this.setState({ price: e.target.value })} />
-              <br></br>
               <label>Rent Price: </label>
               <input className="text" type='text' onInput={e => this.setState({ rent: e.target.value })} />
-              <br></br>
               <label>Rent Duration: </label>
               <input className="text" type='text' onInput={e => this.setState({ rentDays: e.target.value })} />
-              <br></br>
-              <br></br>
               <button className="button"><span>Upload </span></button><br></br>
-
+              
               <label><strong>IPFS Hash:</strong></label>
               <p className="hashLink" onClick={() => this.openModal(this.state.ipfsHash)}>{this.state.ipfsHash}</p>
             </form>

@@ -37,7 +37,7 @@
   margin-top: 400px;
 }
 
-.textIn {
+.text {
   width: 80%;
   height: 20%;
   text-align: center;
@@ -50,26 +50,14 @@
   background-position: 10px 10px; 
   background-repeat: no-repeat;
   font-family: 'Russo One', sans-serif;
-  padding: 12px 20px 12px 40px;}
+  padding: 12px 20px 12px 40px;
+  margin: 30px;
+}
   
 
-.text {
-  width: 100%;
-  text-align: center;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  font-size: 15px;
-  background-color: white;
-  background-image: url('./utils/search.png');
-  background-position: 10px 10px; 
-  background-repeat: no-repeat;
-  padding: 12px 20px 12px 40px;
-}
 
 label {
-  margin: auto;
-  color: white;
+  color: rgb(14, 13, 13);
 }
 
 .hashLink {
@@ -94,7 +82,7 @@ label {
 }
 
 input[type=file] {
-    background-color: 	#606060;
+    background-color: #606060;
     border: none;
     border-radius: 4px;
     color: #FFF;
@@ -102,6 +90,9 @@ input[type=file] {
     text-align: center;
     display: inline-block;
     padding: 6px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
     box-sizing: content-box;
 }
 
