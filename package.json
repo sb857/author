@@ -2,20 +2,19 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "hompage": "https://sterbon.github.io/Decentralized-File-System/",
   "dependencies": {
-    "gh-pages": "^1.1.0",
+    "ipfs-api": "^26.1.2",
     "react": "^16.6.3",
+    "react-awesome-modal": "2.0.5",
     "react-dom": "^16.6.3",
-    "react-scripts": "^2.1.1",
+    "react-scripts": "^2.1.8",
+    "react-tabs": "^3.0.0",
     "web3": "^1.0.0-beta.37"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "prebuild": "npm run build",
-    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -26,8 +25,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "webpack": "^2.1.0-beta.8"
-  }
+  ]
 }
