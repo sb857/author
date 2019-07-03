@@ -12,7 +12,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { exists: false, visibleTimer: false, rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { bookImage: null, exists: false, visibleTimer: false, rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props) {
     super(props)
@@ -75,9 +75,9 @@ class App extends Component {
   }
 
   uploadTransaction = async () => {
-    const { accounts, contract, ipfsHash, contentName, ownerName, price, rent, rentDays } = this.state;
+    const { accounts, contract, ipfsHash, contentName, ownerName, price, rent, rentDays, bookImage } = this.state;
 
-    await contract.methods.uploadContent(ipfsHash, contentName, ownerName, price, rent, rentDays).send({ from: accounts[0] });
+    await contract.methods.uploadContent(ipfsHash, contentName, ownerName, price, rent, rentDays, bookImage).send({ from: accounts[0] });
 
     console.log("storage Value: ", this.state.storageValue);
   };
@@ -195,10 +195,6 @@ class App extends Component {
       if(this.state.exists) {
         alert("This book already exists!")
       }
-      else {
-        this.setState(this.uploadTransaction)
-        console.log('IPFS Hash Value: ', this.state.ipfsHash);
-      }
     })
 
     ipfs.files.add(this.state.imageBuffer, (error, result) => {
@@ -206,9 +202,10 @@ class App extends Component {
         console.error(error)
         return
       }
-      
+      this.setState({bookImage: result[0].hash})
     })
-
+    this.setState(this.uploadTransaction)
+    console.log('IPFS Hash Value: ', this.state.ipfsHash);
   }
 
   calcTime(timestamp) {
@@ -258,15 +255,15 @@ class App extends Component {
     // }
 
     const coins = Object.values(this.state.bookDetails).map((key, index) => (
-      <Card pname={key[0]} author={key[1]} price={key[2]} rentClick={()=> this.rentHandler(key[3])}  buyClick={() => this.buyHandler(key[3])} />
+      <Card imag={key[4]} pname={key[0]} author={key[1]} price={key[2]} rentClick={()=> this.rentHandler(key[3])}  buyClick={() => this.buyHandler(key[3])} />
     ));
 
     const booksList = Object.values(this.state.booksBought).map((key, index) => (
-      <ProfileBooks pname={key[1]} onClick={()=> this.viewHandler(key[0])}/>
+      <ProfileBooks imag={key[2]} pname={key[1]} onClick={()=> this.viewHandler(key[0])}/>
     ));
     
     const rentList = Object.values(this.state.rentedBooks).map((key, index) => (
-      <ProfileBooks pname={key[1]} onClick={()=> this.viewHandler(key[0])}/>
+      <ProfileBooks imag={key[2]} pname={key[1]} onClick={()=> this.viewHandler(key[0])}/>
     ));
     return (
       <div className="App">
@@ -332,7 +329,6 @@ class App extends Component {
               <p><strong>Book Review</strong></p>
               <iframe className="preview" src={this.loadHtml()} ></iframe>
             </Modal>
-
             <button onClick={this.getAll}>Refresh</button>
           </TabPanel>
 
