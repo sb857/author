@@ -96,6 +96,27 @@ input[type=file] {
     box-sizing: content-box;
 }
 
+.insights {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+}
+
+.head {
+  font-size: 60px;
+}
+
+section {
+  background-color: #7b8392;
+  border-radius: 4px;
+  padding: 20px;
+  display:flex;
+  margin: 85px;
+  flex-direction: column;
+  width:500px;
+  height:200px;
+  text-align:center;
+}
 input {
   margin-bottom: 10px;
 }

@@ -5,53 +5,6 @@
       "constant": false,
       "inputs": [
         {
-          "name": "fileHash",
-          "type": "string"
-        }
-      ],
-      "name": "rentTransaction",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "bookNames",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "getAllBooks",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string[][]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
           "name": "tokens",
           "type": "uint256"
         }
@@ -60,67 +13,6 @@
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        },
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "bookDetails",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "authors",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "fileHash",
-          "type": "string"
-        }
-      ],
-      "name": "search",
-      "outputs": [
-        {
-          "name": "contentName",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -136,6 +28,20 @@
         }
       ],
       "name": "purchase",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "fileHash",
+          "type": "string"
+        }
+      ],
+      "name": "rentTransaction",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -167,161 +73,16 @@
         {
           "name": "rentDays",
           "type": "uint256"
+        },
+        {
+          "name": "image",
+          "type": "string"
         }
       ],
       "name": "uploadContent",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "hashValues",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "prices",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "bookName",
-          "type": "string"
-        }
-      ],
-      "name": "getBooks",
-      "outputs": [
-        {
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "a",
-          "type": "string"
-        },
-        {
-          "name": "b",
-          "type": "string"
-        }
-      ],
-      "name": "compareStrings",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "custAddress",
-          "type": "address"
-        }
-      ],
-      "name": "getCustomer",
-      "outputs": [
-        {
-          "name": "customerBalance",
-          "type": "uint256"
-        },
-        {
-          "name": "boughtBooks",
-          "type": "string[][]"
-        },
-        {
-          "name": "rentBooks",
-          "type": "string[][]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "customer",
-          "type": "address"
-        },
-        {
-          "name": "fileHash",
-          "type": "string"
-        }
-      ],
-      "name": "getRentUpdate",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "_i",
-          "type": "uint256"
-        }
-      ],
-      "name": "uint2str",
-      "outputs": [
-        {
-          "name": "_uintAsString",
-          "type": "string"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -384,6 +145,268 @@
       ],
       "name": "TokenPurchase",
       "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "ipfsHash",
+          "type": "string"
+        }
+      ],
+      "name": "allowComment",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "authors",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "bookDetails",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "bookNames",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "a",
+          "type": "string"
+        },
+        {
+          "name": "b",
+          "type": "string"
+        }
+      ],
+      "name": "compareStrings",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getAllBooks",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string[][]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "bookName",
+          "type": "string"
+        }
+      ],
+      "name": "getBooks",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "custAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getCustomer",
+      "outputs": [
+        {
+          "name": "customerBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "boughtBooks",
+          "type": "string[][]"
+        },
+        {
+          "name": "rentBooks",
+          "type": "string[][]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "customer",
+          "type": "address"
+        },
+        {
+          "name": "fileHash",
+          "type": "string"
+        }
+      ],
+      "name": "getRentUpdate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "hashValues",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "prices",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "fileHash",
+          "type": "string"
+        }
+      ],
+      "name": "search",
+      "outputs": [
+        {
+          "name": "contentName",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_i",
+          "type": "uint256"
+        }
+      ],
+      "name": "uint2str",
+      "outputs": [
+        {
+          "name": "_uintAsString",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"ipfsHash\",\"type\":\"string\"}],\"name\":\"get\",\"outputs\":[{\"name\":\"timestamp\",\"type\":\"uint256\"},{\"name\":\"owner\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"owner\",\"type\":\"string\"},{\"name\":\"ipfsHash\",\"type\":\"string\"}],\"name\":\"set\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"status\",\"type\":\"bool\"},{\"indexed\":false,\"name\":\"timestamp\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"owner\",\"type\":\"string\"},{\"indexed\":false,\"name\":\"ipfsHash\",\"type\":\"string\"}],\"name\":\"FileLogStatus\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/D/Projects/Decentralized-File-System/contracts/Ownership.sol\":\"Ownership\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/Projects/Decentralized-File-System/contracts/Ownership.sol\":{\"keccak256\":\"0x942601d3b0cbcb2e50f58b3eb136e761f0234e5eb84ef5dde626e36a79aa635f\",\"urls\":[\"bzzr://0c16420a27d19d770c9438adfc2f89d196b77c549c21e7df7680123a5fb706ed\"]}},\"version\":1}",

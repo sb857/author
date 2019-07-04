@@ -8,7 +8,7 @@ class ProfileBooks extends Component {
             <React.Fragment>
                 <div className="card" keyValue={this.props.keyValue} onClick={this.props.onClick}>
                     
-                    <img className="image" alt="product" src={this.props.imag} align="middle"></img>
+                    <img className="image" alt="product" src={`https://ipfs.io/ipfs/${this.props.imag}`} align="middle"></img>
                     <div className="p-des">
                         <p><strong>Book Name: </strong></p>
                         <div>{this.props.pname}</div>

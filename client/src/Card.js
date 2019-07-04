@@ -6,9 +6,9 @@ class Card extends Component {
         return (
           
             <React.Fragment>
-                <div className="card" keyValue={this.props.keyValue}>
+                <div className="card" >
                     
-                    <img className="image" alt="product" src={this.props.imag} align="middle"></img>
+                    <img className="image" alt="product" src={`https://ipfs.io/ipfs/${this.props.imag}`} align="middle"></img>
                     <div className="p-des">
                         <p><strong>Book Name: </strong></p>
                         <div>{this.props.author}</div>

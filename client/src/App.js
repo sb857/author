@@ -12,12 +12,13 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { bookImage: null, exists: false, visibleTimer: false, rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { totalSold: null, imageBuffer: null, bookImage: null, exists: false, visibleTimer: false, rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
 
   constructor(props) {
     super(props)
 
     this.getFile = this.getFile.bind(this);
+    this.getImage = this.getImage.bind(this);
     this.submitFile = this.submitFile.bind(this);
     this.calcTime = this.calcTime.bind(this);
     this.loadHtml = this.loadHtml.bind(this);
@@ -55,7 +56,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0x787b2b8a024bd6f01a142cefb6e8023228d3b223";
+      instance.address = "0xaedf0a1ebafe3457a28562130c34961f0c71173e";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -90,8 +91,8 @@ class App extends Component {
 
   purchaseTransaction = async () => {
     console.log("Working");
-    const { ipfsHash, contract, accounts, clientName } = this.state;
-    await contract.methods.purchase(ipfsHash, clientName).send({from: accounts[0]});
+    const { ipfsHash, contract, accounts, bookImage } = this.state;
+    await contract.methods.purchase(ipfsHash, bookImage).send({from: accounts[0]});
     console.log("Transaction Successful !");
   };
 
@@ -110,8 +111,8 @@ class App extends Component {
   };
 
   rentTranact = async () => {
-    const { contract, accounts, rentHash} = this.state;
-    await contract.methods.rentTransaction(rentHash).send({from: accounts[0]});
+    const { contract, accounts, rentHash, bookImage} = this.state;
+    await contract.methods.rentTransaction(rentHash, bookImage).send({from: accounts[0]});
   };
 
   loadHtml() {
@@ -173,39 +174,56 @@ class App extends Component {
     reader.onloadend = () => {
       this.setState({ buffer: Buffer(reader.result) })
       console.log('buffer', this.state.buffer)
+
+      ipfs.files.add(this.state.buffer, (error, result) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        this.setState({ ipfsHash: result[0].hash })
+        console.log("Book Details: ",this.state.bookDetails);
+        Object.values(this.state.bookDetails).map((key, index) => {
+          console.log(key[3])
+          if(key[3] == this.state.ipfsHash) {
+            console.log("exists" + this.state.exists)
+            return(this.setState({exists: true}))
+          }
+        });
+        if(this.state.exists) {
+          alert("This book already exists!")
+        }
+      })
+
+    }
+  }
+
+  getImage(event) {
+    event.preventDefault()
+    const file = event.target.files[0]
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(file);
+    console.log('Image buffer', this)
+
+    reader.onloadend = () => {
+      this.setState({ imageBuffer: Buffer(reader.result) })
+      console.log('Image buffer', this.state.imageBuffer)
+
+      ipfs.files.add(this.state.imageBuffer, (error, result) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        this.setState({bookImage: result[0].hash})
+        console.log("Image Hash:", this.state.bookImage)
+      })
+
     }
   }
 
   submitFile(event) {
     event.preventDefault();
-    ipfs.files.add(this.state.buffer, (error, result) => {
-      if (error) {
-        console.error(error)
-        return
-      }
-      this.setState({ ipfsHash: result[0].hash })
-      console.log("Book Details: ",this.state.bookDetails);
-      Object.values(this.state.bookDetails).map((key, index) => {
-        console.log(key[3])
-        if(key[3] == this.state.ipfsHash) {
-          console.log("exists" + this.state.exists)
-          return(this.setState({exists: true}))
-        }
-      });
-      if(this.state.exists) {
-        alert("This book already exists!")
-      }
-    })
-
-    ipfs.files.add(this.state.imageBuffer, (error, result) => {
-      if (error) {
-        console.error(error)
-        return
-      }
-      this.setState({bookImage: result[0].hash})
-    })
-    this.setState(this.uploadTransaction)
-    console.log('IPFS Hash Value: ', this.state.ipfsHash);
+    console.log("BUFFER ", this.state.imageBuffer);
+    this.setState(this.uploadTransaction)  
   }
 
   calcTime(timestamp) {
@@ -287,16 +305,19 @@ class App extends Component {
             <Tab>
               Profile
             </Tab>
+            <Tab>
+              Author Insights
+            </Tab>
           </TabList>
 
           <TabPanel >
 
             <h3>Select your file</h3>
-            <form className="form" onSubmit={this.submitFile}>
+            <form className="form" onSubmit={(e) => this.submitFile(e)}>
               <label>Select Book: </label>
               <input type='file' onChange={this.getFile} accept='application/pdf' />
               <label>Select Book Image: </label>
-              <input type='file' onChange={this.getFile} accept='image/*'/>
+              <input type='file' onChange={this.getImage} accept='image/*'/>
               <br></br>
               <label>Title: </label>
               <input className="text" type='text' onInput={e => this.setState({ contentName: e.target.value })} />
@@ -356,6 +377,16 @@ class App extends Component {
 
             <p className="rentLabel"><strong>BOOKS RENTED</strong></p>
             {rentList}
+          </TabPanel>
+          <TabPanel className="insights">
+            <section>
+              <h3>Total Books Sold / Rented</h3>
+              <h1 className="head">23</h1>
+            </section>
+            <section>
+              <h3>Total Earnings</h3>
+              <h1 className="head">50 ATC</h1>
+            </section>
           </TabPanel>
         </Tabs>
       </div>
