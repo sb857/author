@@ -13,7 +13,7 @@ contract ContentShare {
         uint priceBuy;
         uint priceRent;
         uint rentDays;
-        // address[] customer;
+        string image;
     }
 
     struct Customer {
@@ -27,8 +27,7 @@ contract ContentShare {
     }
 
     struct rentAgreement {
-        
-        // string booksName;
+
         uint boughtOn;
         uint validFor;
     }
@@ -46,11 +45,11 @@ contract ContentShare {
     string[] public prices;
     string[][] public bookDetails;  
 
-    function uploadContent(string memory ipfsHash, string memory contentName, string memory ownerName, uint price, uint rentPrice, uint rentDays) public {
+    function uploadContent(string memory ipfsHash, string memory contentName, string memory ownerName, uint price, uint rentPrice, uint rentDays, string memory image) public {
         
         if(allFiles[ipfsHash].timestamp == 0)
         {
-            allFiles[ipfsHash] = FileMap(block.timestamp, msg.sender, contentName, ownerName, price, rentPrice, rentDays);
+            allFiles[ipfsHash] = FileMap(block.timestamp, msg.sender, contentName, ownerName, price, rentPrice, rentDays, image);
             emit FileLogStatus(true, block.timestamp, msg.sender, ipfsHash);
             // allHashes[filecount] = ipfsHash;
             // filecount++;
@@ -58,7 +57,7 @@ contract ContentShare {
             // authors.push(ownerName) -1;
             // bookNames.push(contentName) -1;
             // prices.push(uint2str(price)) -1;
-            bookDetails.push([ownerName, contentName, uint2str(price), ipfsHash]) ;
+            bookDetails.push([ownerName, contentName, uint2str(price), ipfsHash, image]) ;
         }
 
         else
@@ -80,7 +79,8 @@ contract ContentShare {
 
         Customer storage author = customerDetails[owner];
         Customer storage customer = customerDetails[msg.sender];
-
+        
+        require(customer.balance >= unitPrice, "Low Wallet Balance");
         custBalance = customer.balance - unitPrice;
         ownerBalance = author.balance + unitPrice;
         
@@ -104,6 +104,8 @@ contract ContentShare {
         Customer storage author = customerDetails[owner];
         Customer storage customer = customerDetails[msg.sender];
         
+        
+        require(customer.balance >= rentPrice, "Low Wallet Balance");
         custBalance = customer.balance - rentPrice;
         ownerBalance = author.balance + rentPrice;
         
@@ -149,6 +151,15 @@ contract ContentShare {
     
     function getAllBooks() public view returns (string[][] memory) {
         return(bookDetails);
+    }
+    
+    function allowComment(string memory ipfsHash) public view returns (bool) {
+        Customer memory customer = customerDetails[msg.sender];
+        for(uint i =0; i< customer.booksBought.length; i++) {
+            if(compareStrings(ipfsHash, customer.booksBought[0][i])) {
+                return true;
+            }
+        }
     }
     
     function uint2str(uint _i) public view returns (string memory _uintAsString) {
