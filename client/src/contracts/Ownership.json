@@ -23,7 +23,7 @@
           "type": "string"
         },
         {
-          "name": "custName",
+          "name": "bookImage",
           "type": "string"
         }
       ],
@@ -38,6 +38,10 @@
       "inputs": [
         {
           "name": "fileHash",
+          "type": "string"
+        },
+        {
+          "name": "bookImage",
           "type": "string"
         }
       ],
@@ -286,6 +290,25 @@
       "constant": true,
       "inputs": [
         {
+          "name": "ipfsHash",
+          "type": "string"
+        }
+      ],
+      "name": "getBookTotal",
+      "outputs": [
+        {
+          "name": "totalBought",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
           "name": "custAddress",
           "type": "address"
         }
@@ -313,10 +336,6 @@
       "constant": true,
       "inputs": [
         {
-          "name": "customer",
-          "type": "address"
-        },
-        {
           "name": "fileHash",
           "type": "string"
         }
@@ -326,6 +345,20 @@
         {
           "name": "",
           "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getUploads",
+      "outputs": [
+        {
+          "name": "books",
+          "type": "string[][]"
         }
       ],
       "payable": false,
@@ -378,11 +411,30 @@
           "type": "string"
         }
       ],
-      "name": "search",
+      "name": "searchName",
       "outputs": [
         {
           "name": "contentName",
           "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "fileHash",
+          "type": "string"
+        }
+      ],
+      "name": "searchTotal",
+      "outputs": [
+        {
+          "name": "totalBought",
+          "type": "uint256"
         }
       ],
       "payable": false,
@@ -401,6 +453,29 @@
       "outputs": [
         {
           "name": "_uintAsString",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "uploadedBooks",
+      "outputs": [
+        {
+          "name": "",
           "type": "string"
         }
       ],
