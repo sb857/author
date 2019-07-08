@@ -17,7 +17,7 @@ class ProfileBooks extends Component {
                     </div>
 
                 </div>
-                <style jsx="true">{`
+                {/* <style jsx="true">{`
                     
                     .image {
                         width: 203px;
@@ -54,7 +54,7 @@ class ProfileBooks extends Component {
                         transition: 0.4s;
                     }
                 `}
-                </style>
+                </style> */}
             </React.Fragment>
         );
     }

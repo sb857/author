@@ -1,0 +1,51 @@
+.image {
+    width: 240px;
+    border-bottom: 1px solid #e8e8e8;
+    border-radius: 5px;
+    height: 280px;
+}
+.p-des {
+    padding: 0;
+    padding-top: 10px;
+}
+.p-des p {
+    padding: 0 10px;
+    margin: 5px 0 15px 0;
+    font-size: 15px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card {
+    float: left;
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 15px;
+    margin-bottom: 25px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+.card:hover {
+    transition: 0.4s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.button-grp button {
+    color: #555f61;
+    width: 50%;
+    height: 36px;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid white;
+    border-top: 1px solid #e8e8e8;  
+}
+.button-grp button:hover {
+    border: 1px solid #e8e8e8;
+    cursor: pointer;
+}

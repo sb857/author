@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Card.css';
 
 class Card extends Component {
     render() {
@@ -10,54 +11,25 @@ class Card extends Component {
                     
                     <img className="image" alt="product" src={`https://ipfs.io/ipfs/${this.props.imag}`} align="middle"></img>
                     <div className="p-des">
-                        <p><strong>Book Name: </strong></p>
-                        <div>{this.props.author}</div>
-                        <p><strong>Author: </strong></p>
-                        <div>{this.props.pname}</div>
-                        <p><strong>Price: </strong></p>
-                        <div>{this.props.price}</div>
-                        <button onClick={this.props.buyClick}>Buy</button>
-                        <button onClick={this.props.rentClick}>Rent</button>
+                        <p><strong>Book Name : </strong>{this.props.author}</p>
+                        {/* <div></div> */}
+                        <p><strong>Author : </strong>{this.props.pname}</p>
+                        {/* <div></div> */}
+                        <p><strong>Purchase Price : </strong>{this.props.price}</p>
+                        {/* <div></div> */}
+                        <p><strong>Rent Price : </strong>{this.props.rentPrice}</p>
+                        {/* <div></div> */}
+                        <p><strong>Rent Duration : </strong>{this.props.days}</p>
+
+                        <div className="button-grp">
+                            <button onClick={this.props.buyClick}>Buy</button>
+                            <button onClick={this.props.rentClick}>Rent</button>
+                        </div>
                         {/* <button onClick={this.props.viewClick}>View</button> */}
                     </div>
 
                 </div>
-                <style jsx="true">{`
-                    
-                    .image {
-                        width: 203px;
-                        border-bottom: 1px solid #e8e8e8;
-                        height: 230px;  
-                        align-items: center;
-                    }
-                    .p-des {
-                        padding: 15px;
-                        radius: 10px;
-                    }
-                    .p-des div {
-                        font-size: 15px;
-                        padding-bottom: 10px;
-                        color: white;
-                    }
-                    
-                    .card {
-                        box-shadow: 0 1px 1px 1px rgba(0,0,0,.25);
-                        float: left;
-                        flex-direction: column;
-                        display: flex;
-                        margin: 15px;
-                        margin-bottom: 25px;
-                        radius: 10px;
-                        background-color: rgb(91, 94, 99);
-                        
-                    }
-                    .card:hover {
-                        box-shadow: 0 4px 8px 0 rgba(0,0,0,845);
-                        cursor: pointer;
-                        transition: 0.4s;
-                    }
-                `}
-                </style>
+                
             </React.Fragment>
         );
     }

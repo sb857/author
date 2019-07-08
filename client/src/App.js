@@ -12,7 +12,7 @@ import "./App.css";
 
 class App extends Component {
 
-  state = { totalSold: null, imageBuffer: null, bookImage: null, exists: false, visibleTimer: false, rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: null };
+  state = { earnings: null, totalSold: null, imageBuffer: null, bookImage: null, exists: false, visibleTimer: false, rentedBooks: [], rentHash: null,rent: null, rentDays: null,booksBoughtName: [], booksBought: [],wallet: null, current: [], visibleBook: false, bookDetails: [], prnt: false, render: true, visible: false, bookName: null, clientName: "utsav", token: 0, ownerName: null, price: 0, contentName: null, viewText: 'Show Preview', showPreview: false, fileMetadata: [], storageValue: [], web3: null, accounts: null, contract: null, buffer: null, ipfsHash: "hash" };
 
   constructor(props) {
     super(props)
@@ -56,7 +56,7 @@ class App extends Component {
         OwnershipContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      instance.address = "0xaedf0a1ebafe3457a28562130c34961f0c71173e";
+      instance.address = "0x10becf31e352882847b553404ed7c7daf858eb2f";
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
@@ -91,8 +91,8 @@ class App extends Component {
 
   purchaseTransaction = async () => {
     console.log("Working");
-    const { ipfsHash, contract, accounts, bookImage } = this.state;
-    await contract.methods.purchase(ipfsHash, bookImage).send({from: accounts[0]});
+    const { ipfsHash, contract, accounts} = this.state;
+    await contract.methods.purchase(ipfsHash).send({from: accounts[0]});
     console.log("Transaction Successful !");
   };
 
@@ -111,9 +111,16 @@ class App extends Component {
   };
 
   rentTranact = async () => {
-    const { contract, accounts, rentHash, bookImage} = this.state;
-    await contract.methods.rentTransaction(rentHash, bookImage).send({from: accounts[0]});
+    const { contract, accounts, rentHash} = this.state;
+    await contract.methods.rentTransaction(rentHash).send({from: accounts[0]});
   };
+
+  getTotal = async () => {
+    const { contract, accounts } = this.state;
+    const total = await contract.methods.getUploads(accounts[0]).call();
+    console.log(total);
+    this.setState({totalSold: total[0], earnings: total[1] });
+  }
 
   loadHtml() {
     return (`https://ipfs.io/ipfs/${this.state.ipfsHash}`);
@@ -273,7 +280,7 @@ class App extends Component {
     // }
 
     const coins = Object.values(this.state.bookDetails).map((key, index) => (
-      <Card imag={key[4]} pname={key[0]} author={key[1]} price={key[2]} rentClick={()=> this.rentHandler(key[3])}  buyClick={() => this.buyHandler(key[3])} />
+      <Card days={key[6]} rentPrice={key[5]} imag={key[4]} pname={key[0]} author={key[1]} price={key[2]} rentClick={()=> this.rentHandler(key[3])}  buyClick={() => this.buyHandler(key[3])} />
     ));
 
     const booksList = Object.values(this.state.booksBought).map((key, index) => (
@@ -312,8 +319,8 @@ class App extends Component {
 
           <TabPanel >
 
-            <h3>Select your file</h3>
             <form className="form" onSubmit={(e) => this.submitFile(e)}>
+              <h3>Select your file</h3>
               <label>Select Book: </label>
               <input type='file' onChange={this.getFile} accept='application/pdf' />
               <label>Select Book Image: </label>
@@ -331,8 +338,10 @@ class App extends Component {
               <input className="text" type='text' onInput={e => this.setState({ rentDays: e.target.value })} />
               <button className="button"><span>Upload </span></button><br></br>
               
-              <label><strong>IPFS Hash:</strong></label>
-              <p className="hashLink" onClick={() => this.openModal(this.state.ipfsHash)}>{this.state.ipfsHash}</p>
+              <div className="hash-div">
+                <strong>IPFS Hash: </strong>
+                <span className="hashLink" onClick={() => this.openModal(this.state.ipfsHash)}>{this.state.ipfsHash}</span>
+              </div>
             </form>
 
             <Modal visible={this.state.visible} width="600" height="600" effect="fadeInUp" onClickAway={() => this.closeModal()}>
@@ -343,30 +352,33 @@ class App extends Component {
           </TabPanel>
 
           <TabPanel >
-
-            {coins}
-
+            <div>
+              <button className="refresh" onClick={this.getAll}>Refresh</button>
+            </div>
+            <div className="coins">
+              {coins}
+            </div>
             <Modal visible={this.state.visible} width="600" height="600" effect="fadeInUp" onClickAway={() => this.closeModal()}>
               <p><strong>Book Review</strong></p>
               <iframe className="preview" src={this.loadHtml()} ></iframe>
             </Modal>
-            <button onClick={this.getAll}>Refresh</button>
           </TabPanel>
 
           <TabPanel className="tab">
-            <h3>Buy Tokens</h3>
+            
             <form className="form" onSubmit={this.buyToken}>
-             
+              <h3>Buy Tokens</h3>
               <label>Tokens: </label>
-              <input className="text" type='text' onInput={e => this.setState({ token: e.target.value })} /><br></br>
-              <button className="button"><span>Buy </span></button>
+              <input className="text" type='text' onInput={e => this.setState({ token: e.target.value })} />
+              <button className="buy button"><span>Buy </span></button>
             </form>
           </TabPanel>
 
           <TabPanel>
             <h3>Profile</h3>
-            <button onClick={this.getCustomerCall}>Refresh</button>
-            
+            <div>
+              <button className="refresh" onClick={this.getCustomerCall}>Refresh</button>
+            </div>
             <p><strong>Wallet Balance: </strong>{parseInt(this.state.wallet)} </p>
             <p><strong>BOOKS BOUGHT</strong></p>
             {booksList}
@@ -379,13 +391,16 @@ class App extends Component {
             {rentList}
           </TabPanel>
           <TabPanel className="insights">
+          <div>
+            <button className="refresh" onClick={this.getTotal}>Refresh</button>
+          </div>
             <section>
               <h3>Total Books Sold / Rented</h3>
-              <h1 className="head">23</h1>
+              <h1 className="head">{parseInt(this.state.totalSold)}</h1>
             </section>
             <section>
               <h3>Total Earnings</h3>
-              <h1 className="head">50 ATC</h1>
+              <h1 className="head">{parseInt(this.state.earnings) + " ATC"}</h1>
             </section>
           </TabPanel>
         </Tabs>

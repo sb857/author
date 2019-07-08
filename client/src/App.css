@@ -38,26 +38,28 @@
 }
 
 .text {
-  width: 80%;
-  height: 20%;
-  text-align: center;
+  color: #555f61;
+  width: 100%;
+  height: 36px;
   box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  font-size: 15px;
+  border: 1.5px solid #ccc;
+  border-radius: 25px;
+  font-size: 14px;
   background-color: white;
-  background-image: url('./utils/search.png');
-  background-position: 10px 10px; 
-  background-repeat: no-repeat;
-  font-family: 'Russo One', sans-serif;
-  padding: 12px 20px 12px 40px;
-  margin: 30px;
+  padding: 0 15px;
+  margin: 5px 0 20px 0;
 }
   
-
+.tabs {
+  padding: 0;
+  margin-bottom: 40px;
+}
 
 label {
-  color: rgb(14, 13, 13);
+  padding-left: 15px;
+  color: #555f61;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .hashLink {
@@ -71,53 +73,59 @@ label {
 
 .form {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
+  text-align: left;
   flex-direction: column;
-  background-color: rgb(91, 94, 99);
-  width: 400px;
-  border: 2px solid black;
-  padding: 50px;
+  background: white;
+  width: 500px;
+  padding: 25px 25px 40px 25px;
   margin: auto;
   border-radius: 4px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.form h3 {
+  text-align: center;
+  margin: 0 0 30px 0;
 }
 
 input[type=file] {
-    background-color: #606060;
-    border: none;
-    border-radius: 4px;
-    color: #FFF;
-    cursor:pointer;
-    text-align: center;
-    display: inline-block;
-    padding: 6px;
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-    box-sizing: content-box;
+  color: #555f61;
+  border: none;
+  cursor:pointer;
+  display: inline-block;
+  padding-left: 15px;
+  margin: 12px 0 20px 0;
+  display: flex;
+  flex-direction: row;
+  box-sizing: content-box;
 }
 
 .insights {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   margin: auto;
 }
 
 .head {
-  font-size: 60px;
+  font-size: 32px;
 }
 
 section {
-  background-color: #7b8392;
+  background-color: white;
   border-radius: 4px;
-  padding: 20px;
-  display:flex;
-  margin: 85px;
+  padding: 10px;
+  display: flex;
+  width: 45%;
+  max-width: 360px;
+  margin: 30px;
   flex-direction: column;
-  width:500px;
-  height:200px;
   text-align:center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 input {
+  outline: none;
   margin-bottom: 10px;
 }
 object {
@@ -137,18 +145,40 @@ object {
   border-radius: 4px;
 }
 
+button.refresh {
+  color: white;
+  border: 1px solid #8BC34A;
+  border-radius: 5px;
+  box-shadow: 0.6px 0.6px 1px 0px #888888;
+  height: 30px; 
+  font-size: 14px;
+  letter-spacing: 1.2px;
+  background: #8BC34A;
+  cursor: pointer;
+  outline: none;
+}
+
+button.refresh:hover {
+  box-shadow: 0.5px 0.5px 0.6px 0px #888888;
+}
+
+.coins {
+  max-width: 1080px;
+  margin: 25px auto;
+}
+
 .button {
   display: inline-block;
-  border-radius: 4px;
-  background-color: #383838	;
+  border-radius: 10px;
+  background-color: #0091EA;
   border: none;
   color: #FFFFFF;
   text-align: center;
-  font-size: 18px;
-  padding: 10px;
+  font-size: 16px;
+  padding: 8px;
   transition: all 0.5s;
   cursor: pointer;
-  margin: 5px;
+  margin: 25px 5px 5px;
 }
 
 .button span {
@@ -174,6 +204,15 @@ object {
 .button:hover span:after {
   opacity: 1;
   right: 0;
+}
+
+.buy {
+  width: 90px;
+  margin: 10px 0 0;
+}
+
+div.hash-div {
+  text-align: center;
 }
 
 .ui stackable grid {
