@@ -10,8 +10,8 @@ class ProfileBooks extends Component {
                     
                     <img className="image" alt="product" src={`https://ipfs.io/ipfs/${this.props.imag}`} align="middle"></img>
                     <div className="p-des">
-                        <p><strong>Book Name: </strong></p>
-                        <div>{this.props.pname}</div>
+                        <p><strong>Book Name: </strong>{this.props.pname}</p>
+                        {/* <div>{this.props.pname}</div> */}
                         {/* <p><strong>Author: </strong></p>
                         <div>{this.props.author}</div> */}
                     </div>

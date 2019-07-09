@@ -153,7 +153,7 @@ button.refresh {
   height: 30px; 
   font-size: 14px;
   letter-spacing: 1.2px;
-  background: #8BC34A;
+  background: rgb(135, 212, 48);
   cursor: pointer;
   outline: none;
 }
