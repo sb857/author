@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/auth.or/static/css/main.f68ac188.chunk.css",
+    "main.js": "/auth.or/static/js/main.38ca5cb0.chunk.js",
+    "main.js.map": "/auth.or/static/js/main.38ca5cb0.chunk.js.map",
+    "runtime~main.js": "/auth.or/static/js/runtime~main.99bdf044.js",
+    "runtime~main.js.map": "/auth.or/static/js/runtime~main.99bdf044.js.map",
+    "static/css/2.5c17b9f1.chunk.css": "/auth.or/static/css/2.5c17b9f1.chunk.css",
+    "static/js/2.53dcd0e7.chunk.js": "/auth.or/static/js/2.53dcd0e7.chunk.js",
+    "static/js/2.53dcd0e7.chunk.js.map": "/auth.or/static/js/2.53dcd0e7.chunk.js.map",
+    "index.html": "/auth.or/index.html",
+    "precache-manifest.8e68a590945be7d902c4d787adf978bf.js": "/auth.or/precache-manifest.8e68a590945be7d902c4d787adf978bf.js",
+    "service-worker.js": "/auth.or/service-worker.js",
+    "static/css/2.5c17b9f1.chunk.css.map": "/auth.or/static/css/2.5c17b9f1.chunk.css.map",
+    "static/css/main.f68ac188.chunk.css.map": "/auth.or/static/css/main.f68ac188.chunk.css.map"
+  }
+}
