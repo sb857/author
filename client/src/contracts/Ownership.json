@@ -40,6 +40,10 @@
         {
           "name": "fileHash",
           "type": "string"
+        },
+        {
+          "name": "bookImage",
+          "type": "string"
         }
       ],
       "name": "getRentUpdate",
@@ -249,6 +253,25 @@
         {
           "name": "",
           "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "ipfsHash",
+          "type": "string"
+        }
+      ],
+      "name": "getBookTotal",
+      "outputs": [
+        {
+          "name": "totalBought",
+          "type": "uint256"
         }
       ],
       "payable": false,
